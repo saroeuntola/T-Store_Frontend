@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button, Checkbox, Label, TextInput } from "flowbite-react";
 import { login } from "config_API/Auth_api";
 import { setToken } from "service/Auth";
+import Swal from "sweetalert2";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -18,21 +19,37 @@ const Login = () => {
   const handleLogin = async (body) => {
     try {
       const response = await login(body);
-      setUser(response.data);
-      setToken(response.data.user.token);
-      const role = response.data?.user?.Roles || [];
-     
-     if (role.includes("user")) {
+      const userData = response.data;
+      setUser(userData);
+      setToken(userData.user.token);
+      if (userData.user.status === "Inactive") {
+        Swal.fire({
+          title: "Account Closed",
+          text: "Your account has been Disbale. Please contact support.",
+          icon: "error",
+        });
+        return;
+      }
+
+      const role = userData?.user?.Roles || [];
+
+      if (role.includes("user")) {
         navigate("/");
-     } else {
-         navigate("/admin/default");
-     }
-     
+      } else {
+        navigate("/admin");
+      }
+
       console.log(response.data);
     } catch (error) {
       console.error("Login failed:", error);
+      Swal.fire({
+        title: "Login Failed",
+        text: "An error occurred. Please try again.",
+        icon: "error",
+      });
     }
   };
+
 
 
   return (

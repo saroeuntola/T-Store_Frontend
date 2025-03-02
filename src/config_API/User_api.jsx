@@ -16,9 +16,15 @@ const getUser = async (token) => {
   };
 
 
-const getUserById = async (id) => {
+const getUserById = async (id,token) => {
   try {
-    const response = await baseURL.get(`/users/${id}`);
+    const response = await baseURL.get(`users/show/${id}`
+      ,{
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     return response.data;
   } catch (error) {
     return error.response;
@@ -27,12 +33,12 @@ const getUserById = async (id) => {
 
 const createUser = async (token, body) => {
   try {
-    const response = await baseURL.post("/users", body, {
-      header: {
+    const response = await baseURL.post("/users/create", body, {
+      headers: {
         Authorization: `Bearer ${token}`,
       },
     });
-    return response;
+    return response.data;
   } catch (error) {
     return error.response;
   }
@@ -40,13 +46,13 @@ const createUser = async (token, body) => {
 
 const updateUser = async (token, id, body) => {
   try {
-    const response = await baseURL.post(`/users/${id}`, body, {
+    const response = await baseURL.put(`/users/update/${id}`, body, {
       headers: {
     
         Authorization: `Bearer ${token}`,
       },
     });
-    return response;
+    return response.data;
   } catch (error) {
     return error.response;
   }
@@ -59,7 +65,7 @@ const deleteUser = async (token, id) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    return response;
+    return response.data;
   } catch (error) {
     return error.response;
   }
@@ -69,13 +75,26 @@ const deleteUser = async (token, id) => {
 
 const updateProfile = async (token,id,body) => {
   try {
-    const response = await baseURL.post(`/users/${id}`, body, {
-      header: {
+    const response = await baseURL.post(`/users/upload_profile/${id}`, body, {
+      headers: {
         "Content-Type": "multipart/form-data",
         Authorization: `Bearer ${token}`,
       },
     });
     return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+const updateStatus = async (token, id, body) => {
+  try {
+    const response = await baseURL.put(`/users/update_status/${id}`, body, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
   } catch (error) {
     return error.response;
   }
@@ -88,6 +107,7 @@ export {
   updateUser,
   deleteUser,
   updateProfile,
+  updateStatus,
  
 };
 

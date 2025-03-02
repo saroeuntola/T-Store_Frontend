@@ -1,5 +1,12 @@
+import { getCategory } from "config_API/category_api";
+import { createProduct } from "config_API/Product_api";
 import { Button, FileInput, Label, Textarea, TextInput } from "flowbite-react";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import Select from "react-select";
+import { getAccessToken } from "service/Auth";
+import Swal from "sweetalert2";
 
 // import { baseURL } from "service/baseURL";
 // import { getAccessToken } from "service/Auth";
@@ -9,6 +16,54 @@ import Select from "react-select";
 
 
 const AddProduct = () => {
+ const navigate = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const token = getAccessToken();
+  const [listCategory, setListCategory] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+
+  useEffect(() => {
+    const getCategorys = async () => {
+      try {
+        const response = await getCategory(token);
+          setListCategory(response?.data);
+      } catch (error) {
+        console.log("Error fetching roles:", error);
+      }
+      finally{
+          setLoading(false);
+      }
+    
+    };
+    getCategorys();
+  }, [token]);
+  const onSubmit = async (body) => {
+      try {
+        const response = await createProduct(token, body);
+        if (response) {
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Created Successfully",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        }
+        navigate("/admin/products");
+      } catch (err) {
+        Swal.fire({
+          title: "Oops",
+          text: err.response?.data?.message || "An error occurred",
+          icon: "error",
+        });
+      }
+    };
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-gray-100">
@@ -110,5 +165,4 @@ const AddProduct = () => {
     </main>
   );
 };
-
 export default AddProduct;
