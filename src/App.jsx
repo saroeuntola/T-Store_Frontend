@@ -13,6 +13,8 @@ import EditUser from "views/admin/user/EditUser";
 import { removeToken } from "service/Auth";
 import Unauthorized from "service/Auth";
 import Profile from "views/admin/user/Profile";
+import EditCategory from "views/admin/category/EditCategory";
+import AddCategory from "views/admin/category/AddCategory";
 
 const isTokenExpired = (token) => {
   if (!token) return true;
@@ -50,6 +52,8 @@ const App = () => {
           <Route path="/addproduct" element={<AddProduct />} />
           <Route path="/adduser" element={<AddUser />} />
           <Route path="/edituser/:id" element={<EditUser />} />
+          <Route path="/addcategory" element={<AddCategory />} />
+          <Route path="/editcategory/:id" element={<EditCategory />} />
         </>
       ) : (
         <Route path="/*" element={<Navigate to="/login" />} />

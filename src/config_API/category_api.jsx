@@ -15,9 +15,13 @@ const getCategory = async (token) => {
   };
 
 
-const getCategoryById = async (id) => {
+const getCategoryById = async (token, id) => {
   try {
-    const response = await baseURL.get(`/category/${id}`);
+    const response = await baseURL.get(`/category/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data;
   } catch (error) {
     return error.response;
@@ -27,7 +31,7 @@ const getCategoryById = async (id) => {
 const createCategory = async (token, body) => {
   try {
     const response = await baseURL.post("/category", body, {
-      header: {
+      headers: {
         Authorization: `Bearer ${token}`,
       },
     });
@@ -37,9 +41,9 @@ const createCategory = async (token, body) => {
   }
 };
 
-const UpdateCategoryUser = async (token, id, body) => {
+const UpdateCategory = async (token, id, body) => {
   try {
-    const response = await baseURL.post(`/category/${id}`, body, {
+    const response = await baseURL.put(`/category/${id}`, body, {
       headers: {
     
         Authorization: `Bearer ${token}`,
@@ -53,7 +57,7 @@ const UpdateCategoryUser = async (token, id, body) => {
 
 const deleteCategory = async (token, id) => {
   try {
-    const response = await baseURL.delete(`/cagetory/${id}`, {
+    const response = await baseURL.delete(`/category/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -70,6 +74,6 @@ export {
   getCategory,
   getCategoryById,
   createCategory,
-  UpdateCategoryUser,
+  UpdateCategory,
   deleteCategory,
 };
