@@ -1,6 +1,27 @@
-import React from 'react'
+import { getRole } from 'config_API/roles_api';
+import React, { useEffect, useState } from 'react'
+import { getAccessToken } from 'service/Auth';
+
 
 const Role = () => {
+  const [roles ,setRoles] = useState([]);
+const token = getAccessToken();
+  const fetchRoles = async () => {
+   try{
+     const response = await getRole(token);
+     setRoles(response?.data);
+   }
+   catch(error){
+     console.log(error);
+   }
+  
+  
+  }
+  
+  useEffect(() => {
+    fetchRoles();
+  }, []);
+ 
   return (
     <main className="mt-3 px-2">
       <button className="mb-4 w-32 rounded-lg bg-green-600 p-2 text-white">
@@ -12,17 +33,11 @@ const Role = () => {
           <thead>
             <tr className="bg-yellow-600">
               <th className="border-b px-6 py-3 text-left font-medium text-white">
-                #
+                ID
               </th>
 
               <th className="border-b px-6 py-3 text-left font-medium text-white">
-                Product Name
-              </th>
-              <th className="border-b px-6 py-3 text-left font-medium text-white">
-                Category
-              </th>
-              <th className="border-b px-6 py-3 text-left font-medium text-white">
-                Price
+                Role Name
               </th>
               <th className="border-b px-6 py-3 text-left font-medium text-white">
                 Actions
@@ -30,21 +45,19 @@ const Role = () => {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td className="border-b px-6 py-4">2</td>
-
-              <td className="border-b px-6 py-4">Product B</td>
-              <td className="border-b px-6 py-4">Category 2</td>
-              <td className="border-b px-6 py-4">$20.00</td>
-              <td className="border-b px-6 py-4">
-                <button className="w-16 rounded-lg bg-blue-600 p-2 text-white">
-                  Edit
-                </button>
-                <button className="ml-2 w-16 rounded-lg bg-red-600 p-2 text-white">
-                  Delete
-                </button>
-              </td>
-            </tr>
+            {
+              roles.map((role) => (
+                <tr key={role.id}>
+                  <td className="border-b px-6 py-4">{role.id}</td>
+                  <td className="border-b px-6 py-4">{role.name}</td>
+                  <td className="border-b px-6 py-4">
+                    <button className="w-16 rounded-lg bg-blue-600 p-2 text-white">
+                      Edit
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            
           </tbody>
         </table>
       </div>

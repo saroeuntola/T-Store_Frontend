@@ -15,7 +15,7 @@ const Product = () => {
   
     const listProduct = async () => {
       try {
-         const response = await getProduct(token);
+         const response = await getProduct();
         setProduct(response.product);
         console.log(response.product);
       } catch (error) {
@@ -24,9 +24,9 @@ const Product = () => {
         setLoading(false);
       }
     };
-       if (token) {
+     
          listProduct();
-       }
+       
     }, []);
 
       const handleDelete = async (id) => {
@@ -66,7 +66,7 @@ const Product = () => {
       ) : (
         <div className="mt-3 overflow-x-auto">
           <Link to="/addproduct">
-            <button className="mb- w-32 rounded-lg bg-green-600 p-2 text-white">
+            <button className="mb-3 w-32 rounded-lg bg-green-600 p-2 text-white">
               Add Product
             </button>
           </Link>
@@ -76,20 +76,29 @@ const Product = () => {
                 <th className="border-b px-6 py-3 text-left font-medium text-white">
                   ID
                 </th>
+                {/* <th className="border-b px-6 py-3 text-left font-medium text-white">
+                  Image
+                </th> */}
                 <th className="border-b px-6 py-3 text-left font-medium text-white">
-                  Product Image
-                </th>
-                <th className="border-b px-6 py-3 text-left font-medium text-white">
-                  Product Name
+                  Name
                 </th>
                 <th className="border-b px-6 py-3 text-left font-medium text-white">
                   Category
                 </th>
                 <th className="border-b px-6 py-3 text-left font-medium text-white">
+                  Size
+                </th>
+                <th className="border-b px-6 py-3 text-left font-medium text-white">
+                  Color
+                </th>
+                <th className="border-b px-6 py-3 text-left font-medium text-white">
                   Price
                 </th>
                 <th className="border-b px-6 py-3 text-left font-medium text-white">
-                  CreateAt Date
+                  Create at
+                </th>
+                <th className="border-b px-6 py-3 text-left font-medium text-white">
+                  Added by
                 </th>
                 <th className="border-b px-6 py-3 text-left font-medium text-white">
                   Actions
@@ -100,26 +109,39 @@ const Product = () => {
               {product.map((item, index) => (
                 <tr key={item.id}>
                   <td className="border-b px-6 py-4">{item.id}</td>
-                  <td className="border-b px-6 py-4">
+
+                  <td className="border-b px-6 py-4 flex gap-3 items-center">
                     <img
                       src={`${urlProductImage}${item.image}`}
                       alt={item.name}
                       className="h-12 w-12 rounded object-cover"
                     />
+                    {item.name}
                   </td>
-                  <td className="border-b px-6 py-4">{item.name}</td>
-                  <td className="border-b px-6 py-4">{item.get_category.name}</td>
+                  <td className="border-b px-6 py-4">
+                    {item.get_category.name}
+                  </td>
+                  <td className="border-b px-6 py-4">
+                    {item.sizes.map((size) => size.size_name).join(", ")}
+                  </td>
+                  <td className="border-b px-6 py-4">
+                    {item.colors.map((color) => color.color_name).join(", ")}
+                  </td>
                   <td className="border-b px-6 py-4">${item.price}</td>
                   <td className="border-b px-6 py-4">
                     {new Date(item.created_at).toLocaleDateString()}
+                  </td>
+                  <td className="border-b px-6 py-4">
+                    {item.get_user.username}
                   </td>
                   <td className="gap-2 border-b px-6 py-4 lg:flex">
                     <button className="w-16 rounded-lg bg-blue-600 p-2 text-white">
                       Edit
                     </button>
-                    <button className="w-16 rounded-lg bg-red-600 p-2 text-white" onClick={()=>handleDelete(
-                      item.id
-                    )}>
+                    <button
+                      className="w-16 rounded-lg bg-red-600 p-2 text-white"
+                      onClick={() => handleDelete(item.id)}
+                    >
                       Delete
                     </button>
                   </td>

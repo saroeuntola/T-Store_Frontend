@@ -35,17 +35,16 @@ const user = InfoUser();
 useEffect(() => {
   const can = (role) => (user?.Roles || []).includes(role);
   if (user) {
-    if (!can("admin")) {
+    if (!can("admin") && !can("manager")) {
       setAuthorized(false);
     }
   }
-}, [user]);
-
-useEffect(() => {
   if (!authorized) {
     navigate("/unauthorized");
   }
-}, [authorized, navigate]);
+
+}, [user, authorized, navigate]);
+
 
 
 

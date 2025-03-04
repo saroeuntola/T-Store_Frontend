@@ -6,6 +6,7 @@ import { Button, Checkbox, Label, TextInput } from "flowbite-react";
 import { login } from "config_API/Auth_api";
 import { setToken } from "service/Auth";
 import Swal from "sweetalert2";
+import { useEffect } from "react";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -22,10 +23,11 @@ const Login = () => {
       const userData = response.data;
       setUser(userData);
       setToken(userData.user.token);
+
       if (userData.user.status === "Inactive") {
         Swal.fire({
           title: "Account Closed",
-          text: "Your account has been Disbale. Please contact support.",
+          text: "Your account has been disabled. Please contact support.",
           icon: "error",
         });
         return;
@@ -33,13 +35,17 @@ const Login = () => {
 
       const role = userData?.user?.Roles || [];
 
-      if (role.includes("user")) {
+      if (role.includes("admin") || role.includes("manager")) {
+        navigate("/admin/default", { replace: true });
+      } else if (role.includes("user")) {
         navigate("/");
       } else {
-        navigate("/admin");
+        Swal.fire({
+          title: "Unauthorized",
+          text: "You do not have access.",
+          icon: "warning",
+        });
       }
-
-      console.log(response.data);
     } catch (error) {
       console.error("Login failed:", error);
       Swal.fire({
@@ -49,6 +55,8 @@ const Login = () => {
       });
     }
   };
+
+
 
 
 

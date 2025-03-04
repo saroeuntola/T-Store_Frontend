@@ -16,13 +16,10 @@ const EditCategory = () => {
       register,
       handleSubmit,
       setValue,
-      watch,
       formState: { errors },
     } = useForm();
-    const curUser = InfoUser(); // Get user info
+    const curUser = InfoUser(); 
     const token = getAccessToken();
-    const [listRoles, setListRoles] = useState([]);
-    const [loading, setLoading] = useState(true);
     const {id} = useParams();
 
      useEffect(() => {
@@ -33,15 +30,13 @@ const EditCategory = () => {
              const userData = response.category;
              setValue("name", userData.name);
              if (curUser?.username) {
-                setValue("user_display", curUser.username); // Display username
-                setValue("user_id", curUser.id); // Store user ID (hidden)
+                setValue("username", curUser.username);
+                setValue("user_id", curUser.id);
               }
            }
            console.log(response.category)
          } catch (error) {
            console.error("Error fetching user or roles:", error);
-         } finally {
-           setLoading(false);
          }
        };
        fetchCategory();
@@ -49,8 +44,8 @@ const EditCategory = () => {
   
     const onSubmit = async (body) => {
       try {
-        const response = await UpdateCategory(token,id, body);
-        if (response) {
+        const response = await UpdateCategory(token,id,body);
+        if (response?.category) {
           Swal.fire({
             position: "center",
             icon: "success",
@@ -59,6 +54,7 @@ const EditCategory = () => {
             timer: 1500,
           });
         }
+        console.log(response)
         navigate("/admin/category");
       } catch (err) {
         Swal.fire({
@@ -71,59 +67,57 @@ const EditCategory = () => {
 
   return (
     <main className="mt-10 flex justify-center px-4 sm:px-6 lg:px-8">
-          <div className="w-full rounded-2xl bg-white px-6 py-16 shadow-xl shadow-gray-700 sm:w-8/12 sm:px-10 md:w-6/12 lg:w-4/12">
-            <h4 className="mb-4 text-center text-3xl font-bold text-navy-700 dark:text-white sm:text-4xl">
-              Add Category
-            </h4>
-    
-            {/* Divider */}
-            <div className="mb-6 flex items-center gap-3">
-              <div className="h-px w-full bg-gray-200 dark:bg-navy-700" />
-              <p className="text-base text-gray-600 dark:text-white"> or </p>
-              <div className="h-px w-full bg-gray-200 dark:bg-navy-700" />
-            </div>
-    
-            {/* Form */}
-            <form onSubmit={handleSubmit(onSubmit)}>
-              {/* Category Name Input */}
-              <div className="mb-4">
-                <Label htmlFor="name">Name</Label>
-                <TextInput
-                  id="name"
-                  type="text"
-                  placeholder="Category Name"
-                  {...register("name", { required: "Category Name is required" })}
-                />
-                {errors.name && (
-                  <p className="text-sm text-red-500">{errors.name.message}</p>
-                )}
-              </div>
-    
-              {/* Display Username but store User ID */}
-              <div className="mb-4">
-                <Label htmlFor="user_display">Added By</Label>
-                <TextInput
-                  id="user_display"
-                  type="text"
-                  placeholder="Username"
-                  readOnly // Show username but prevent editing
-                  {...register("user_display")}
-                />
-              </div>
-    
-              {/* Hidden Input to store User ID */}
-              <input type="hidden" {...register("user_id")} />
-    
-              {/* Save Button */}
-              <Button
-                type="submit"
-                className="linear mt-4 w-full bg-brand-500 py-3 text-base font-medium text-white transition duration-200 hover:bg-brand-600 active:bg-brand-700 dark:bg-brand-400 dark:hover:bg-brand-300"
-              >
-                Save
-              </Button>
-            </form>
+      <div className="w-full rounded-2xl bg-white px-6 py-16 shadow-xl shadow-gray-700 sm:w-8/12 sm:px-10 md:w-6/12 lg:w-4/12">
+        <h4 className="mb-4 text-center text-3xl font-bold text-navy-700 dark:text-white sm:text-4xl">
+          Add Category
+        </h4>
+
+        {/* Divider */}
+        <div className="mb-6 flex items-center gap-3">
+          <div className="h-px w-full bg-gray-200 dark:bg-navy-700" />
+          <p className="text-base text-gray-600 dark:text-white"> or </p>
+          <div className="h-px w-full bg-gray-200 dark:bg-navy-700" />
+        </div>
+
+        {/* Form */}
+        <form onSubmit={handleSubmit(onSubmit)}>
+          {/* Category Name Input */}
+          <div className="mb-4">
+            <Label htmlFor="name">Name</Label>
+            <TextInput
+              id="name"
+              type="text"
+              placeholder="Category Name"
+              {...register("name", { required: "Category Name is required" })}
+            />
+            {errors.name && (
+              <p className="text-sm text-red-500">{errors.name.message}</p>
+            )}
           </div>
-        </main>
+
+          {/* Display Username but store User ID */}
+          <div className="mb-4">
+            <Label>Added By</Label>
+            <TextInput
+              type="text"
+              placeholder="Username"
+              readOnly
+              {...register("username")}
+            />
+
+            <input type="hidden" {...register("user_id")} />
+          </div>
+
+          {/* Save Button */}
+          <Button
+            type="submit"
+            className="linear mt-4 w-full bg-brand-500 py-3 text-base font-medium text-white transition duration-200 hover:bg-brand-600 active:bg-brand-700 dark:bg-brand-400 dark:hover:bg-brand-300"
+          >
+            Save
+          </Button>
+        </form>
+      </div>
+    </main>
   );
 };
 

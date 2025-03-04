@@ -1,5 +1,5 @@
-import { Routes, Route, Navigate } from "react-router-dom";
-import React, { useState, useEffect } from "react";
+import React from "react";
+import { Routes, Route, useLocation } from "react-router-dom";
 
 import RtlLayout from "layouts/rtl";
 import AdminLayout from "layouts/admin";
@@ -7,63 +7,155 @@ import Home from "views/pages/Home";
 import Login from "views/auth/Login";
 import Register from "views/auth/Register";
 import AddProduct from "views/admin/pruduct/AddProduct";
-import { getAccessToken } from "service/Auth";
 import AddUser from "views/admin/user/AddUser";
 import EditUser from "views/admin/user/EditUser";
-import { removeToken } from "service/Auth";
-import Unauthorized from "service/Auth";
+
 import Profile from "views/admin/user/Profile";
 import EditCategory from "views/admin/category/EditCategory";
 import AddCategory from "views/admin/category/AddCategory";
+import AddSizes from "views/admin/sizes/AddSizes";
+import EditSizes from "views/admin/sizes/EditSizes";
+import AddColor from "views/admin/colors/AddColor";
+import EditColor from "views/admin/colors/EditColor";
 
-const isTokenExpired = (token) => {
-  if (!token) return true;
-  try {
-    const { exp } = JSON.parse(atob(token.split(".")[1]));
-    const currentTime = Date.now() / 1000;
-    return exp < currentTime; 
-  } catch (error) {
-    console.error("Invalid token", error);
-    return true; 
-  }
-};
+import ProtectedRoute from "./ProtectedRoute";
+import Unauthorized from "service/Auth";
+import Navbar from "views/pages/Navbar";
+import Footer from "views/pages/Footer";
+import NotFound from "views/auth/NotFound";
+
 
 const App = () => {
-  const [token, setToken] = useState(getAccessToken());
-  useEffect(() => {
-    if (token && isTokenExpired(token)) {
-      removeToken();
-      setToken(null); 
-    }
-  }, [token]);
+  const location = useLocation();
+  const isDashboardRoute =
+    location.pathname.startsWith("/admin") ||
+    location.pathname.startsWith("/rtl") ||
+    location.pathname.startsWith("/add") || // Covers addproduct, adduser, addcategory, etc.
+    location.pathname.startsWith("/edit") || // Covers edituser, editcategory, etc.
+    location.pathname === "/login" ||
+    location.pathname === "/unauthorized" ||
+    location.pathname === "/404" ||
+    location.pathname.startsWith("/profile");
 
   return (
-    <Routes>
-      {/* Public Routes */}
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/" element={<Home />} />
-      <Route path="/profile/:id" element={<Profile/>} />
-      {/* Private Routes */}
-      {token ? (
-        <>
-          <Route path="admin/*" element={<AdminLayout />} />
-          <Route path="rtl/*" element={<RtlLayout />} />
-          <Route path="/addproduct" element={<AddProduct />} />
-          <Route path="/adduser" element={<AddUser />} />
-          <Route path="/edituser/:id" element={<EditUser />} />
-          <Route path="/addcategory" element={<AddCategory />} />
-          <Route path="/editcategory/:id" element={<EditCategory />} />
-        </>
-      ) : (
-        <Route path="/*" element={<Navigate to="/login" />} />
+    <main>
+      {/* Conditionally render Navbar and Footer */}
+      {!isDashboardRoute && <Navbar />}
 
-      )}
-      {/* Unauthorized */}
-      <Route
-        path="/unauthorized" element={<Unauthorized/>}
-      />
-    </Routes>
+      <Routes>
+        {/* Public Routes */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/" element={<Home />} />
+
+        {/* Private Routes */}
+        <Route
+          path="/profile/:id"
+          element={
+            <ProtectedRoute requiredRoles={["admin", "manager", "user"]}>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/*"
+          element={
+            <ProtectedRoute requiredRoles={["admin", "manager"]}>
+              <AdminLayout />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/rtl/*"
+          element={
+            <ProtectedRoute requiredRoles={["admin", "manager"]}>
+              <RtlLayout />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/addproduct"
+          element={
+            <ProtectedRoute requiredRoles={["admin", "manager"]}>
+              <AddProduct />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/adduser"
+          element={
+            <ProtectedRoute requiredRoles={["admin"]}>
+              <AddUser />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/edituser/:id"
+          element={
+            <ProtectedRoute requiredRoles={["admin"]}>
+              <EditUser />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/addcategory"
+          element={
+            <ProtectedRoute requiredRoles={["admin"]}>
+              <AddCategory />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/editcategory/:id"
+          element={
+            <ProtectedRoute requiredRoles={["admin"]}>
+              <EditCategory />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/add_sizes"
+          element={
+            <ProtectedRoute requiredRoles={["admin"]}>
+              <AddSizes />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/edit_sizes/:id"
+          element={
+            <ProtectedRoute requiredRoles={["admin"]}>
+              <EditSizes />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/add_colors"
+          element={
+            <ProtectedRoute requiredRoles={["admin"]}>
+              <AddColor />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/edit_colors/:id"
+          element={
+            <ProtectedRoute requiredRoles={["admin"]}>
+              <EditColor />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Unauthorized Route */}
+        <Route path="/unauthorized" element={<Unauthorized />} />
+
+        {/* Catch-all Route for 404 Page */}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+
+      {/* Conditionally render Footer */}
+      {!isDashboardRoute && <Footer />}
+    </main>
   );
 };
 

@@ -6,6 +6,7 @@ import MainDashboard from "views/admin/default";
 // import RTLDefault from "views/rtl/default";
 import Product from "views/admin/pruduct/product";
 import Category from "views/admin/category/Category";
+import Sizes from "views/admin/sizes/Sizes";
 
 // Auth Imports
 // import Register from "views/auth/Register";
@@ -14,7 +15,7 @@ import User from "views/admin/user/User";
 import Role from "views/admin/role/Role";
 import Order from "views/admin/order/Order";
 import Transaction from "views/admin/transaction/Transaction";
-
+import Color from "views/admin/colors/Color";
 import { FaAward, FaHome, FaLock, FaShoppingCart, FaStickyNote, FaTags, FaTshirt, FaUser } from "react-icons/fa";
 
 
@@ -57,6 +58,22 @@ const routes = [
     secondary: true,
   },
   {
+    name: "Product Sizes",
+    layout: "/admin",
+    path: "sizes",
+    icon: <FaTags size={23} />,
+    component: <Sizes />,
+    secondary: true,
+  },
+  {
+    name: "Product Colors",
+    layout: "/admin",
+    path: "colors",
+    icon: <FaTags size={23} />,
+    component: <Color/>,
+    secondary: true,
+  },
+  {
     name: "Order",
     layout: "/admin",
     icon: <FaShoppingCart size={23} />,
@@ -68,7 +85,7 @@ const routes = [
     layout: "/admin",
     icon: <FaStickyNote size={23} />,
     path: "transaction",
-    component: <Transaction/>,
+    component: <Transaction />,
   },
 
   // {

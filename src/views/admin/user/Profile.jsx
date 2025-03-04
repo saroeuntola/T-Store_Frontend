@@ -7,6 +7,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { FaUserCircle } from "react-icons/fa";
 import { urlUserImage } from "service/baseURL";
+import InfoUser from "config_API/infoUser";
 
 const Profile = () => {
   const { register, handleSubmit, setValue } = useForm();
@@ -18,30 +19,27 @@ const Profile = () => {
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
 
+
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const response = await getUserById(id, token);
-        
         if (response?.user) {
           setUser(response.user);
           setValue("username", response.user.username);
           setValue("email", response.user.email);
           setValue("sex", response.user.sex);
           setValue("phone", response.user.phone);
-          setValue("address", response.user.address);
           setValue("profile", response.user.profile);
+          setValue("roles", response.user.roles?.[0].name || "");
         }
-        console.log(response.user);
+        console.log(response.user)
       } catch (error) {
         console.error("Error fetching user:", error);
       }
     };
     fetchUser();
-    if(!token){
-        navigate('/login');
-    }
-  }, [id, setValue]);
+  }, [id, setValue, token, navigate]);
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -61,32 +59,41 @@ const Profile = () => {
     try {
       const response = await updateProfile(token, id, formData);
       if (response) {
-        Swal.fire("Success", "Profile picture updated!", "success");
+       Swal.fire({
+         title: "Success",
+         text: "Profile picture updated!",
+         icon: "success",
+         timer: 1000, 
+         showConfirmButton: false, 
+       });
         setUser((prev) => ({ ...prev, profile: response.updatedProfile }));
         setSelectedFile(null);
+        setPreviewImage("");
       }
+      setTimeout(() => {
+        window.location.reload();
+      }, 100);
     } catch (error) {
       Swal.fire("Error", "Failed to upload image", "error");
     }
   };
 
-const onSubmit = async (body) => {
-  try {
-    const response = await updateUser(token, id, body);
-    if (response) {
-      Swal.fire("Success", "Profile Updated Successfully", "success");
-      setShowModal(false); // Close modal after saving
+  const onSubmit = async (body) => {
+    try {
+      const response = await updateUser(token, id, body);
+      if (response?.user) {
+        Swal.fire("Success", "Profile Updated Successfully", "success");
+        setShowModal(false); // Close modal after saving
+      }
+    } catch (err) {
+      console.error("Error updating profile:", err); // Log the error
+      Swal.fire(
+        "Error",
+        err.response?.data?.message || "An error occurred",
+        "error"
+      );
     }
-  } catch (err) {
-    console.error("Error updating profile:", err); // Log the error
-    Swal.fire(
-      "Error",
-      err.response?.data?.message || "An error occurred",
-      "error"
-    );
-  }
-};
-
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
@@ -108,6 +115,17 @@ const onSubmit = async (body) => {
           ) : (
             <FaUserCircle className="mb-4 h-32 w-32 text-gray-400" />
           )}
+
+          {/* File input to change profile image */}
+          <input
+            type="file"
+            onChange={handleFileChange}
+            accept="image/*"
+            className="mt-4"
+          />
+          <Button color="blue" onClick={handleUpload} className="mt-2">
+            Upload Profile Picture
+          </Button>
         </Card>
 
         {/* Right Section - Profile Information */}
@@ -115,11 +133,11 @@ const onSubmit = async (body) => {
           <h2 className="mb-4 text-lg font-semibold">Profile Information</h2>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <Label>Username</Label>
-            <TextInput disabled value={user.username || ""} />
+            <TextInput disabled {...register("username", { required: true })} />
             <Label>Email</Label>
-            <TextInput disabled value={user.email || ""} />
+            <TextInput disabled {...register("email", { required: true })} />
             <Label>Phone</Label>
-            <TextInput disabled value={user.phone || ""} />
+            <TextInput disabled {...register("phone", { required: true })} />
           </div>
           <Button
             color="blue"
@@ -145,6 +163,7 @@ const onSubmit = async (body) => {
 
               <Label>Phone</Label>
               <TextInput {...register("phone", { required: true })} />
+              <TextInput hidden {...register("roles", { required: true })} />
             </div>
             <div className="mt-4 flex justify-end gap-2">
               <Button color="gray" onClick={() => setShowModal(false)}>

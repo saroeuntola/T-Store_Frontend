@@ -81,7 +81,7 @@ const updateProfile = async (token,id,body) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    return response;
+    return response.data;
   } catch (error) {
     return error.response;
   }

@@ -11,7 +11,7 @@ import Select from "react-select";
 import { getAccessToken } from "service/Auth";
 import Swal from "sweetalert2";
 
-const AddProduct = () => {
+const EditProduct = () => {
   const navigate = useNavigate();
   const {
     register,
@@ -141,7 +141,7 @@ const AddProduct = () => {
     <main className="flex min-h-screen items-center justify-center bg-gray-100">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="grid w-full max-w-4xl gap-6 rounded-lg bg-white p-10 shadow-lg md:grid-cols-2 shadow-lg"
+        className="grid w-full max-w-4xl gap-6 rounded-lg bg-white p-10 shadow-lg shadow-lg md:grid-cols-2"
       >
         {/* Left Section */}
         <div className="flex flex-col gap-4">
@@ -296,4 +296,4 @@ const AddProduct = () => {
   );
 };
 
-export default AddProduct;
+export default EditProduct;

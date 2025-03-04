@@ -206,7 +206,7 @@ const handleLogout = () => {
                 </Link>
                 <Link
                   target="_blank"
-                  to="/home"
+                  to="/"
                   className="mt-3 text-sm text-gray-800 dark:text-white hover:dark:text-white"
                 >
                   Go to Website

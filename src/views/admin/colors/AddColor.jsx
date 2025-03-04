@@ -2,12 +2,13 @@ import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { Button, Label, TextInput } from "flowbite-react";
-import { createCategory } from "config_API/category_api";
 import { getAccessToken } from "service/Auth";
 import InfoUser from "config_API/infoUser";
-import Swal from "sweetalert2";
 
-const AddCategory = () => {
+import Swal from "sweetalert2";
+import { createColor } from "config_API/Color_api";
+
+const AddColor = () => {
   const navigate = useNavigate();
   const {
     register,
@@ -17,39 +18,41 @@ const AddCategory = () => {
   } = useForm();
 
   const token = getAccessToken();
-  const curUser = InfoUser(); 
+  const currentUser = InfoUser();
   useEffect(() => {
-    if (curUser?.username) {
-      setValue("username", curUser.username); 
-      setValue("user_id", curUser.id);
+    if (currentUser?.username) {
+      setValue("username", currentUser.username);
+      setValue("user_id", currentUser.id);
     }
-  }, [curUser, setValue]);
+  }, [currentUser, setValue,token]);
 
   const handleCreate = async (body) => {
     try {
-      const response = await createCategory(token, body);
-     if(response){
-             Swal.fire({
-               title: "Success!",
-               text: "Category created successfully.",
-               icon: "success",
-               timer: 2000,
-               timerProgressBar: true,
-               showConfirmButton: false,
-             });
-               navigate("/admin/category");
-           } else {
-             console.error(response);
-             Swal.fire({
-               title: "Error",
-               text: "Failed to create Category. Please try again.",
-               icon: "error",
-               timer: 2000,
-               timerProgressBar: true,
-               showConfirmButton: false,
-             });
-           } 
-   
+      const response = await createColor(token, body);
+      if (response?.color) {
+        setValue("color_name", response.color.name);
+        setValue("user_id", response.color.user_id);
+  
+        Swal.fire({
+          title: "Success!",
+          text: "Size created successfully.",
+          icon: "success",
+          timer: 2000,
+          timerProgressBar: true,
+          showConfirmButton: false,
+        });
+          navigate("/admin/colors");
+      } else {
+        console.error(response);
+        Swal.fire({
+          title: "Error",
+          text: "Failed to create size. Please try again.",
+          icon: "error",
+          timer: 2000,
+          timerProgressBar: true,
+          showConfirmButton: false,
+        });
+      }
     } catch (error) {
       console.error("AddCategory failed:", error);
     }
@@ -59,10 +62,9 @@ const AddCategory = () => {
     <main className="mt-10 flex justify-center px-4 sm:px-6 lg:px-8">
       <div className="w-full rounded-2xl bg-white px-6 py-16 shadow-xl shadow-gray-700 sm:w-8/12 sm:px-10 md:w-6/12 lg:w-4/12">
         <h4 className="mb-4 text-center text-3xl font-bold text-navy-700 dark:text-white sm:text-4xl">
-          Add Category
+          Add Product Sizes
         </h4>
 
-        {/* Divider */}
         <div className="mb-6 flex items-center gap-3">
           <div className="h-px w-full bg-gray-200 dark:bg-navy-700" />
           <p className="text-base text-gray-600 dark:text-white"> or </p>
@@ -71,14 +73,14 @@ const AddCategory = () => {
 
         {/* Form */}
         <form onSubmit={handleSubmit(handleCreate)}>
-          {/* Category Name Input */}
           <div className="mb-4">
-            <Label htmlFor="name">Name</Label>
+            <Label>Color</Label>
             <TextInput
-              id="name"
               type="text"
-              placeholder="Category Name"
-              {...register("name", { required: "Category Name is required" })}
+              placeholder="Size Name"
+              {...register("color_name", {
+                required: "Category Name is required",
+              })}
             />
             {errors.name && (
               <p className="text-sm text-red-500">{errors.name.message}</p>
@@ -86,16 +88,16 @@ const AddCategory = () => {
           </div>
 
           <div className="mb-4">
-            <Label >Added By</Label>
+            <Label>Added By</Label>
             <TextInput
-              id="user_display"
               type="text"
               placeholder="Username"
-              readOnly 
+              readOnly
               {...register("username")}
             />
+            <input type="hidden" {...register("user_id")}/>
           </div>
-          <input type="hidden" {...register("user_id")} />
+
           <Button
             type="submit"
             className="linear mt-4 w-full bg-brand-500 py-3 text-base font-medium text-white transition duration-200 hover:bg-brand-600 active:bg-brand-700 dark:bg-brand-400 dark:hover:bg-brand-300"
@@ -108,4 +110,4 @@ const AddCategory = () => {
   );
 };
 
-export default AddCategory;
+export default AddColor;
