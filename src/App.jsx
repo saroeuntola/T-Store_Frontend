@@ -33,10 +33,11 @@ const App = () => {
     location.pathname.startsWith("/add") || // Covers addproduct, adduser, addcategory, etc.
     location.pathname.startsWith("/edit") || // Covers edituser, editcategory, etc.
     location.pathname === "/login" ||
+    location.pathname === "/register" ||
     location.pathname === "/unauthorized" ||
     location.pathname === "/404" ||
     location.pathname.startsWith("/profile");
-
+  
   return (
     <main>
       {/* Conditionally render Navbar and Footer */}
