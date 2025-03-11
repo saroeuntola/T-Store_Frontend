@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { getBanner, createBanner } from "config_API/Banner_api";
+import { createBanner } from "config_API/Banner_api";
 import InfoUser from "config_API/infoUser";
 import { getAccessToken } from "service/Auth";
 import Swal from "sweetalert2";
@@ -21,13 +21,17 @@ const AddBanner = () => {
   const [imagePreview, setImagePreview] = useState(null);
   const token = getAccessToken();
   const currentUser = InfoUser();
-
+  useEffect(() => {
+    if (currentUser?.username) {
+      setValue("user_id", currentUser.id);
+    }
+  }, [currentUser, setValue]);
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     setImage(file);
 
     if (file) {
-      setImagePreview(URL.createObjectURL(file)); // Preview new image
+      setImagePreview(URL.createObjectURL(file));
     }
   };
 
@@ -44,7 +48,7 @@ const AddBanner = () => {
 
     try {
       const response = await createBanner(token, formData);
-      if (response) {
+      if (response?.banner) {
         Swal.fire({
           position: "center",
           icon: "success",
@@ -114,7 +118,7 @@ const AddBanner = () => {
           )}
         </div>
 
-        <input type="hidden" {...register("user_id")} value={currentUser?.id} />
+        <input type="hidden" {...register("user_id")}/>
 
         <button
           type="submit"
@@ -126,5 +130,4 @@ const AddBanner = () => {
     </div>
   );
 };
-
 export default AddBanner;
