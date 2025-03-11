@@ -1,5 +1,6 @@
 // Footer.jsx
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -32,14 +33,14 @@ const Footer = () => {
             <h4 className="mb-4 text-lg font-semibold">Quick Links</h4>
             <ul className="space-y-2 text-gray-400">
               <li>
-                <a href="#" className="transition-colors hover:text-white">
+                <Link to="/"  className="transition-colors hover:text-white">
                   Home
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="transition-colors hover:text-white">
+                <Link to="/about" className="transition-colors hover:text-white">
                   About
-                </a>
+                </Link>
               </li>
               <li>
                 <a href="#" className="transition-colors hover:text-white">
@@ -47,9 +48,9 @@ const Footer = () => {
                 </a>
               </li>
               <li>
-                <a href="#" className="transition-colors hover:text-white">
+                <Link to="/contact" className="transition-colors hover:text-white">
                   Contact
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

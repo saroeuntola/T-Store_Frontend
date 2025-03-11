@@ -54,11 +54,11 @@ const Navbar = () => {
 
       {/* Desktop Navigation */}
       <ul className="hidden space-x-6 text-sm font-medium uppercase text-gray-700 md:flex">
-        <li className="text-blue-500">Home</li>
+        <Link to="/" className="text-blue-500">Home</Link>
         <li>Services</li>
         <li>Products</li>
-        <li>About Us</li>
-        <li>Contact</li>
+        <Link to="/about">About Us</Link>
+        <Link to="/contact">Contact</Link>
       </ul>
 
       {/* Icons & Mobile Menu Button */}

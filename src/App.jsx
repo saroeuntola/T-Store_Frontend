@@ -26,6 +26,8 @@ import NotFound from "views/auth/NotFound";
 import EditProduct from "views/admin/pruduct/EditProduct";
 import AddBanner from "views/admin/banner/AddBanner";
 import EditBanner from "views/admin/banner/EditBanner";
+import About from "views/pages/About";
+import Contact from "views/pages/Contact";
 
 
 const App = () => {
@@ -51,7 +53,8 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/" element={<Home />} />
-
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
         {/* Private Routes */}
         <Route
           path="/profile/:id"
