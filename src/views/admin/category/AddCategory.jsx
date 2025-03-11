@@ -86,16 +86,16 @@ const AddCategory = () => {
           </div>
 
           <div className="mb-4">
-            <Label >Added By</Label>
             <TextInput
               id="user_display"
-              type="text"
+              type="hidden"
               placeholder="Username"
-              readOnly 
+              readOnly
               {...register("username")}
             />
+            <input type="hidden" {...register("user_id")} />
           </div>
-          <input type="hidden" {...register("user_id")} />
+
           <Button
             type="submit"
             className="linear mt-4 w-full bg-brand-500 py-3 text-base font-medium text-white transition duration-200 hover:bg-brand-600 active:bg-brand-700 dark:bg-brand-400 dark:hover:bg-brand-300"

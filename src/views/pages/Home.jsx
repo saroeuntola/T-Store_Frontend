@@ -139,21 +139,33 @@ const Home = () => {
                   alt={product.name}
                   className="h-56 w-full object-cover"
                 />
-                <div className="p-4">
-                  <h3 className="text-lg font-semibold text-gray-800">
+                <div className="rounded-lg bg-white p-5 shadow-lg transition-shadow duration-300 hover:shadow-2xl">
+                  <h3 className="text-lg font-semibold text-gray-900">
                     {product.name}
                   </h3>
-                  <p className="truncate text-sm text-gray-500">
+                  <p className="mt-1 line-clamp-2 text-sm text-gray-500">
                     {product.description}
                   </p>
+
                   <div className="mt-4 flex items-center justify-between">
                     <span className="text-xl font-bold text-blue-600">
                       ${product.price}
                     </span>
-                    <button className="rounded-md bg-yellow-300 px-4 py-2 text-sm text-black transition hover:bg-yellow-400">
-                      Add to Cart
-                    </button>
+
+                    <span
+                      className={`rounded-full px-3 py-1 text-sm font-semibold ${
+                        product.status === "Instock"
+                          ? "bg-green-100 text-green-700"
+                          : "bg-red-100 text-red-700"
+                      }`}
+                    >
+                      {product.status}
+                    </span>
                   </div>
+
+                  <button className="mt-4 w-full rounded-lg bg-gradient-to-r from-yellow-400 to-yellow-500 px-5 py-2 text-sm font-medium text-black shadow-md transition hover:from-yellow-500 hover:to-yellow-600 hover:shadow-lg">
+                    Add to Cart
+                  </button>
                 </div>
               </div>
             ))}

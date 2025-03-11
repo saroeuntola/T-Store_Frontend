@@ -157,13 +157,15 @@ const Profile = () => {
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <Label>Username*</Label>
               <TextInput {...register("username", { required: true })} />
-
               <Label>Email</Label>
               <TextInput {...register("email")} disabled />
-
               <Label>Phone</Label>
               <TextInput {...register("phone", { required: true })} />
-              <TextInput hidden {...register("roles", { required: true })} />
+              <TextInput
+                type="hidden"
+                className="d-none"
+                {...register("roles", { required: true })}
+              />
             </div>
             <div className="mt-4 flex justify-end gap-2">
               <Button color="gray" onClick={() => setShowModal(false)}>

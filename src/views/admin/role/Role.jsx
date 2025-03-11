@@ -46,7 +46,7 @@ const token = getAccessToken();
           </thead>
           <tbody>
             {
-              roles.map((role) => (
+              roles?.map((role) => (
                 <tr key={role.id}>
                   <td className="border-b px-6 py-4">{role.id}</td>
                   <td className="border-b px-6 py-4">{role.name}</td>

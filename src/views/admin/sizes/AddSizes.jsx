@@ -89,9 +89,8 @@ const AddSizes = () => {
           </div>
 
           <div className="mb-4">
-            <Label>Added By</Label>
             <TextInput
-              type="text"
+              type="hidden"
               placeholder="Username"
               readOnly
               {...register("username")}

@@ -1,4 +1,5 @@
 import { deleteProduct } from "config_API/Product_api";
+import { updateStatus } from "config_API/Product_api";
 import { getProduct } from "config_API/Product_api";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -58,7 +59,42 @@ const Product = () => {
           console.error("Error deleting:", error);
         }
       };
+const handleUpdateStatus = async (id, body) => {
+    try {
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "You want to update the user's status?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, update it!",
+      });
 
+      if (result.isConfirmed) {
+        await updateStatus(token,id, body);
+        setProduct((prevProdcuts) =>
+          prevProdcuts.map((item) => {
+            if (item.id === id) {
+              return {
+                ...item,
+                status: item.status === "Instock" ? "Outstock" : "Instock",
+              };
+            }
+            return item;
+          })
+        );
+
+        Swal.fire({
+          title: "Updated!",
+          text: "User status has been updated.",
+          icon: "success",
+        });
+      }
+    } catch (error) {
+      console.error("Error updating status:", error);
+    }
+  };
   return (
     <main className="mt-3 px-2">
       {loading ? (
@@ -76,9 +112,7 @@ const Product = () => {
                 <th className="border-b px-6 py-3 text-left font-medium text-white">
                   ID
                 </th>
-                {/* <th className="border-b px-6 py-3 text-left font-medium text-white">
-                  Image
-                </th> */}
+           
                 <th className="border-b px-6 py-3 text-left font-medium text-white">
                   Name
                 </th>
@@ -93,6 +127,9 @@ const Product = () => {
                 </th>
                 <th className="border-b px-6 py-3 text-left font-medium text-white">
                   Price
+                </th>
+                <th className="border-b px-6 py-3 text-left font-medium text-white">
+                  Status
                 </th>
                 <th className="border-b px-6 py-3 text-left font-medium text-white">
                   Create at
@@ -110,7 +147,7 @@ const Product = () => {
                 <tr key={item.id}>
                   <td className="border-b px-6 py-4">{item.id}</td>
 
-                  <td className="border-b px-6 py-4 flex gap-3 items-center">
+                  <td className="flex items-center gap-3 border-b px-6 py-4">
                     <img
                       src={`${urlProductImage}${item.image}`}
                       alt={item.name}
@@ -128,6 +165,18 @@ const Product = () => {
                     {item.colors.map((color) => color.color_name).join(", ")}
                   </td>
                   <td className="border-b px-6 py-4">${item.price}</td>
+                  <td className="pt-2.5">
+                    <button
+                      className={`rounded px-3 py-1 text-sm font-medium text-white ${
+                        item.status === "Instock"
+                          ? "bg-green-500 hover:bg-green-600"
+                          : "bg-red-500 hover:bg-red-600"
+                      }`}
+                      onClick={() => handleUpdateStatus(item.id)}
+                    >
+                      {item.status === "Instock" ? "Instock" : "Outstock"}
+                    </button>
+                  </td>
                   <td className="border-b px-6 py-4">
                     {new Date(item.created_at).toLocaleDateString()}
                   </td>
@@ -135,9 +184,12 @@ const Product = () => {
                     {item.get_user.username}
                   </td>
                   <td className="gap-2 border-b px-6 py-4 lg:flex">
-                    <button className="w-16 rounded-lg bg-blue-600 p-2 text-white">
-                      Edit
-                    </button>
+                    <Link to={`/edit_product/${item.id}`}>
+                      <button className="w-16 rounded-lg bg-blue-600 p-2 text-white">
+                        Edit
+                      </button>
+                    </Link>
+
                     <button
                       className="w-16 rounded-lg bg-red-600 p-2 text-white"
                       onClick={() => handleDelete(item.id)}

@@ -95,11 +95,11 @@ const EditCategory = () => {
             )}
           </div>
 
-          {/* Display Username but store User ID */}
+      
           <div className="mb-4">
-            <Label>Added By</Label>
+        
             <TextInput
-              type="text"
+              type="hidden"
               placeholder="Username"
               readOnly
               {...register("username")}

@@ -101,9 +101,9 @@ const EditSizes = () => {
           </div>
 
           <div className="mb-4">
-            <Label>Add By</Label>
+
             <TextInput
-              type="text"
+              type="hidden"
               placeholder="Username"
               readOnly
               {...register("username")}

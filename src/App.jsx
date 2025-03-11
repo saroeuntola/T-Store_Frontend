@@ -23,6 +23,9 @@ import Unauthorized from "service/Auth";
 import Navbar from "views/pages/Navbar";
 import Footer from "views/pages/Footer";
 import NotFound from "views/auth/NotFound";
+import EditProduct from "views/admin/pruduct/EditProduct";
+import AddBanner from "views/admin/banner/AddBanner";
+import EditBanner from "views/admin/banner/EditBanner";
 
 
 const App = () => {
@@ -30,8 +33,8 @@ const App = () => {
   const isDashboardRoute =
     location.pathname.startsWith("/admin") ||
     location.pathname.startsWith("/rtl") ||
-    location.pathname.startsWith("/add") || // Covers addproduct, adduser, addcategory, etc.
-    location.pathname.startsWith("/edit") || // Covers edituser, editcategory, etc.
+    location.pathname.startsWith("/add") || 
+    location.pathname.startsWith("/edit") || 
     location.pathname === "/login" ||
     location.pathname === "/register" ||
     location.pathname === "/unauthorized" ||
@@ -83,6 +86,14 @@ const App = () => {
           }
         />
         <Route
+          path="/edit_product/:id"
+          element={
+            <ProtectedRoute requiredRoles={["admin", "manager"]}>
+              <EditProduct />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/adduser"
           element={
             <ProtectedRoute requiredRoles={["admin"]}>
@@ -101,7 +112,7 @@ const App = () => {
         <Route
           path="/addcategory"
           element={
-            <ProtectedRoute requiredRoles={["admin"]}>
+            <ProtectedRoute requiredRoles={["admin", "manager"]}>
               <AddCategory />
             </ProtectedRoute>
           }
@@ -109,7 +120,7 @@ const App = () => {
         <Route
           path="/editcategory/:id"
           element={
-            <ProtectedRoute requiredRoles={["admin"]}>
+            <ProtectedRoute requiredRoles={["admin", "manager"]}>
               <EditCategory />
             </ProtectedRoute>
           }
@@ -117,7 +128,7 @@ const App = () => {
         <Route
           path="/add_sizes"
           element={
-            <ProtectedRoute requiredRoles={["admin"]}>
+            <ProtectedRoute requiredRoles={["admin", "manager"]}>
               <AddSizes />
             </ProtectedRoute>
           }
@@ -125,7 +136,7 @@ const App = () => {
         <Route
           path="/edit_sizes/:id"
           element={
-            <ProtectedRoute requiredRoles={["admin"]}>
+            <ProtectedRoute requiredRoles={["admin", "manager"]}>
               <EditSizes />
             </ProtectedRoute>
           }
@@ -133,7 +144,7 @@ const App = () => {
         <Route
           path="/add_colors"
           element={
-            <ProtectedRoute requiredRoles={["admin"]}>
+            <ProtectedRoute requiredRoles={["admin", "manager"]}>
               <AddColor />
             </ProtectedRoute>
           }
@@ -141,12 +152,27 @@ const App = () => {
         <Route
           path="/edit_colors/:id"
           element={
-            <ProtectedRoute requiredRoles={["admin"]}>
+            <ProtectedRoute requiredRoles={["admin", "manager"]}>
               <EditColor />
             </ProtectedRoute>
           }
         />
-
+        <Route
+          path="/edit_banner/:id"
+          element={
+            <ProtectedRoute requiredRoles={["admin", "manager"]}>
+              <EditBanner />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/add_banner"
+          element={
+            <ProtectedRoute requiredRoles={["admin", "manager"]}>
+              <AddBanner/>
+            </ProtectedRoute>
+          }
+        />
         {/* Unauthorized Route */}
         <Route path="/unauthorized" element={<Unauthorized />} />
 

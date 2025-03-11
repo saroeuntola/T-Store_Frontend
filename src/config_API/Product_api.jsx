@@ -61,6 +61,18 @@ const deleteProduct = async (token, id) =>{
       return error.response;
     }
 }
+const updateStatus = async (token, id, body) => {
+  try {
+    const response = await baseURL.put(`/products/update_status/${id}`, body, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    return error.response;
+  }
+};
 
 export {
     getProduct,
@@ -68,6 +80,7 @@ export {
     createProduct,
     updateProduct,
     deleteProduct,
+    updateStatus,
   };
 
 

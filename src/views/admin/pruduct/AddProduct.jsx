@@ -26,13 +26,11 @@ const AddProduct = () => {
   const [sizes, setSizes] = useState([]);
   const [colors, setColors] = useState([]);
   const [loading, setLoading] = useState(true);
-  const currentUser = InfoUser(); // Get current user info
+  const currentUser = InfoUser();
   const [selectedSizes, setSelectedSizes] = useState([]);
   const [selectedColors, setSelectedColors] = useState([]);
   const [image, setImage] = useState(null);
-  const [imagePreview, setImagePreview] = useState(null); // State for image preview
-
-  // Fetch data on component load
+  const [imagePreview, setImagePreview] = useState(null);
   useEffect(() => {
     const list = async () => {
       try {
@@ -43,7 +41,6 @@ const AddProduct = () => {
         setColors(res_colors?.color || []);
         setListCategory(response?.category);
         if (currentUser?.username) {
-          // Pre-fill user-related fields
           setValue("username", currentUser.username);
           setValue("user_id", currentUser.id);
         }
@@ -56,32 +53,26 @@ const AddProduct = () => {
     list();
   }, [token, currentUser, setValue]);
 
-  // Handle size selection
   const handleSizeChange = (selectedOptions) => {
     setSelectedSizes(selectedOptions);
   };
 
-  // Handle color selection
   const handleColorChange = (selectedOptions) => {
     setSelectedColors(selectedOptions);
   };
 
-  // Handle image selection
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     setImage(file);
 
-    // Create an object URL for image preview
     if (file) {
       setImagePreview(URL.createObjectURL(file));
     }
   };
 
-  // Handle form submission
   const onSubmit = async (data) => {
     const formData = new FormData();
 
-    // Validate that required fields are populated
     if (
       !data.name ||
       !data.description ||
@@ -101,16 +92,14 @@ const AddProduct = () => {
     formData.append("name", data.name);
     formData.append("description", data.description);
     formData.append("price", data.price);
-    formData.append("category_id", data.category); // Corrected to match backend
-    formData.append("user_id", data.user_id); // Keeping user_id
+    formData.append("category_id", data.category); 
+    formData.append("user_id", data.user_id);
 
-    // Append sizes and colors properly as arrays
-    selectedSizes.forEach((size) => formData.append("size_id[]", size.value)); // Correct field name for sizes
+    selectedSizes.forEach((size) => formData.append("size_id[]", size.value)); 
     selectedColors.forEach((color) =>
       formData.append("color_id[]", color.value)
-    ); // Correct field name for colors
+    ); 
 
-    // Ensure an image is added
     if (image) {
       formData.append("image", image);
     }
@@ -141,7 +130,7 @@ const AddProduct = () => {
     <main className="flex min-h-screen items-center justify-center bg-gray-100">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="grid w-full max-w-4xl gap-6 rounded-lg bg-white p-10 shadow-lg md:grid-cols-2 shadow-lg"
+        className="grid w-full max-w-4xl gap-6 rounded-lg bg-white p-10 shadow-lg shadow-lg md:grid-cols-2"
       >
         {/* Left Section */}
         <div className="flex flex-col gap-4">
@@ -238,7 +227,7 @@ const AddProduct = () => {
             )}
           </div>
 
-          {/* Sizes Multi-Select */}
+         
           <div>
             <Label className="mb-2 block text-black" value="Select Sizes" />
             <Select
@@ -252,7 +241,6 @@ const AddProduct = () => {
             />
           </div>
 
-          {/* Colors Multi-Select */}
           <div>
             <Label className="mb-2 block text-black" value="Select Colors" />
             <Select
@@ -266,24 +254,21 @@ const AddProduct = () => {
             />
           </div>
 
-          {/* Username (displayed but not editable) */}
+     
           <div>
-            <Label className="mb-2 block text-black" value="Create by" />
             <TextInput
               {...register("username", { required: "Username is required" })}
-              type="text"
+              type="hidden"
               value={currentUser?.username || ""}
               className="w-full"
               disabled
             />
+            <input
+              {...register("user_id")}
+              type="hidden"
+              value={currentUser?.id}
+            />
           </div>
-
-          {/* Hidden user_id (stores user ID) */}
-          <input
-            {...register("user_id")}
-            type="hidden"
-            value={currentUser?.id}
-          />
         </div>
 
         <div className="mt-auto">

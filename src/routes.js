@@ -2,12 +2,11 @@ import React from "react";
 
 // Admin Imports
 import MainDashboard from "views/admin/default";
-
 // import RTLDefault from "views/rtl/default";
 import Product from "views/admin/pruduct/product";
 import Category from "views/admin/category/Category";
 import Sizes from "views/admin/sizes/Sizes";
-
+import { MdColorLens } from "react-icons/md";
 // Auth Imports
 // import Register from "views/auth/Register";
 // import Login from "views/auth/Login";
@@ -16,7 +15,12 @@ import Role from "views/admin/role/Role";
 import Order from "views/admin/order/Order";
 import Transaction from "views/admin/transaction/Transaction";
 import Color from "views/admin/colors/Color";
-import { FaAward, FaHome, FaLock, FaShoppingCart, FaStickyNote, FaTags, FaTshirt, FaUser } from "react-icons/fa";
+import { FaAward, FaDumpster, FaHome, FaShoppingCart, FaStickyNote, FaTags, FaTshirt, FaUser } from "react-icons/fa";
+import {FaPanorama } from "react-icons/fa6"
+
+import Banner from "views/admin/banner/Banner";
+import Brand from "views/admin/brand/Brand";
+import { ImFontSize } from "react-icons/im";
 
 
 const routes = [
@@ -61,7 +65,7 @@ const routes = [
     name: "Product Sizes",
     layout: "/admin",
     path: "sizes",
-    icon: <FaTags size={23} />,
+    icon: <ImFontSize size={23} />,
     component: <Sizes />,
     secondary: true,
   },
@@ -69,9 +73,23 @@ const routes = [
     name: "Product Colors",
     layout: "/admin",
     path: "colors",
-    icon: <FaTags size={23} />,
-    component: <Color/>,
+    icon: <MdColorLens size={23} />,
+    component: <Color />,
     secondary: true,
+  },
+  {
+    name: "Banner",
+    layout: "/admin",
+    icon: <FaPanorama size={23} />,
+    path: "banner",
+    component: <Banner />,
+  },
+  {
+    name: "Brand",
+    layout: "/admin",
+    icon: <FaDumpster size={23} />,
+    path: "brand",
+    component: <Brand />,
   },
   {
     name: "Order",
