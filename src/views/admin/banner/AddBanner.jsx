@@ -21,8 +21,9 @@ const AddBanner = () => {
   const [imagePreview, setImagePreview] = useState(null);
   const token = getAccessToken();
   const currentUser = InfoUser();
-  useEffect(() => {
+useEffect(() => {
     if (currentUser?.username) {
+      setValue("username", currentUser.username); 
       setValue("user_id", currentUser.id);
     }
   }, [currentUser, setValue]);
@@ -48,7 +49,7 @@ const AddBanner = () => {
 
     try {
       const response = await createBanner(token, formData);
-      if (response?.banner) {
+      if (response.banner) {
         Swal.fire({
           position: "center",
           icon: "success",

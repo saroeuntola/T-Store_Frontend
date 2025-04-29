@@ -1,34 +1,34 @@
 import { getMyInfo } from "config_API/Auth_api";
-import InfoUser from "config_API/infoUser";
-import React, { useState, useEffect } from "react";
-import { FaSearch, FaShoppingCart, FaBars, FaTimes, FaUserCircle } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
 import { removeToken, getAccessToken } from "service/Auth";
 import { urlUserImage } from "service/baseURL";
+import React, { useState, useEffect, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { HiSearch } from "react-icons/hi";
+import { FaShoppingCart, FaBars, FaTimes, FaUserCircle } from "react-icons/fa";
+import { CartContext } from "./Context/CartProvider";
 
 const Navbar = () => {
-  const [showSearch, setShowSearch] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const [user, setUser] = useState({});
   const navigate = useNavigate();
   const token = getAccessToken();
+    const { cartItems } = useContext(CartContext);
 
   useEffect(() => {
     const fetchMyInfo = async () => {
-      try {
-        if (token) {
+      if (token) {
+        try {
           const response = await getMyInfo(token);
           setUser(response?.data);
           setIsLoggedIn(true);
+        } catch (error) {
+          console.error("Error fetching user info:", error);
+          setIsLoggedIn(false);
         }
-      } catch (error) {
-        console.error("Error fetching user info:", error);
-        setIsLoggedIn(false);
       }
     };
-
     fetchMyInfo();
   }, [token]);
 
@@ -39,105 +39,121 @@ const Navbar = () => {
     navigate("/");
   };
 
-
-
-  const toggleProfileDropdown = () => {
-    setShowProfileDropdown(!showProfileDropdown);
-  };
-
   return (
-    <nav className="fixed z-10 flex w-full items-center justify-between bg-yellow-300 px-20 py-4 shadow-md">
-      {/* Logo */}
-      <div className="text-2xl font-semibold">
-        TStore<span className="text-blue-500">.</span>
-      </div>
+    <nav className="fixed z-50 w-full bg-yellow-300 shadow-md">
+      <div className="flex items-center justify-between px-6 py-4 md:px-20">
+        {/* Logo */}
+        <Link to="/" className="text-2xl font-semibold">
+          TStore<span className="text-blue-500">.</span>
+        </Link>
 
-      {/* Desktop Navigation */}
-      <ul className="hidden space-x-6 text-sm font-medium uppercase text-gray-700 md:flex">
-        <Link to="/" className="text-blue-500">Home</Link>
-        <li>Services</li>
-        <li>Products</li>
-        <Link to="/about">About Us</Link>
-        <Link to="/contact">Contact</Link>
-      </ul>
-
-      {/* Icons & Mobile Menu Button */}
-      <div className="flex items-center space-x-4 text-gray-700">
-        <FaSearch
-          className="cursor-pointer"
-          onClick={() => setShowSearch(!showSearch)}
-        />
-        <FaShoppingCart className="cursor-pointer" />
-
-        {/* SignIn/Profile Button */}
-        {!isLoggedIn ? (
-          <Link to="/login">
-           <button className="cursor-pointer" >
-            Sign In
-          </button>
+        {/* Desktop Menu */}
+        <ul className="hidden space-x-6 text-sm font-medium uppercase text-gray-700 md:flex">
+          <Link to="/" className="hover:text-blue-500">
+            Home
           </Link>
-         
-        ) : (
-          <div className="relative" onClick={toggleProfileDropdown}>
-            {/* Profile Image */}
-            {user.profile ? (
-              <img
-                className="h-10 w-10 cursor-pointer rounded-full"
-                src={`${urlUserImage}${user.profile}`}
-                alt="profile"
-              />
-            ) : (
-              <FaUserCircle color="gray" className="h-10 w-10 rounded-full" />
-            )}
-            {/* Profile Dropdown */}
-            {showProfileDropdown && (
-              <div className="absolute right-0 mt-2 w-48 rounded-md bg-white p-2 text-sm text-gray-700 shadow-lg">
-                <div className="px-4 py-2 font-semibold">{user.username}</div>
-                <Link to={`profile/${user.id}`}>
-                  <button className="block w-full px-4 py-2 text-left text-blue-500">
-                    Settings
-                  </button>
-                </Link>
+          <Link to="/services" className="hover:text-blue-500">
+            Services
+          </Link>
+          <Link to="/products" className="hover:text-blue-500">
+            Products
+          </Link>
+          <Link to="/about" className="hover:text-blue-500">
+            About
+          </Link>
+          <Link to="/contact" className="hover:text-blue-500">
+            Contact
+          </Link>
+        </ul>
 
-                <button
-                  className="block w-full px-4 py-2 text-left text-red-500"
-                  onClick={handleLogout}
-                >
-                  Logout
-                </button>
-              </div>
-            )}
+        {/* Icons & Mobile Menu Button */}
+        <div className="flex items-center space-x-4">
+          {/* Search */}
+          <div className="relative hidden md:block">
+            <input
+              type="text"
+              placeholder="Search..."
+              className="w-60 rounded-lg border px-3 py-2 text-sm focus:outline-none"
+            />
+            <HiSearch className="absolute right-3 top-3 text-gray-500" />
           </div>
-        )}
 
-        {/* Mobile Menu Toggle Button */}
-        <button className="md:hidden" onClick={() => setShowMenu(!showMenu)}>
-          {showMenu ? <FaTimes size={22} /> : <FaBars size={22} />}
-        </button>
+          {/* Cart */}
+          <Link to="/cart" className="relative">
+            <FaShoppingCart sixe={30} className="cursor-pointer text-lg text-gray-700" />
+            {cartItems.length > 0 && (
+              <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white">
+                {cartItems.length}
+              </span>
+            )}
+          </Link>
+
+          {/* Profile */}
+          {isLoggedIn ? (
+            <div className="relative">
+              <button
+                onClick={() => setShowProfileDropdown(!showProfileDropdown)}
+              >
+                {user.profile ? (
+                  <img
+                    className="h-10 w-10 rounded-full border"
+                    src={`${urlUserImage}${user.profile}`}
+                    alt="profile"
+                  />
+                ) : (
+                  <FaUserCircle className="h-8 w-8 text-gray-700" />
+                )}
+              </button>
+              {showProfileDropdown && (
+                <div className="absolute right-0 mt-2 w-48 rounded-md bg-white shadow-md">
+                  <p className="px-4 py-2 font-semibold">{user.username}</p>
+                  <Link
+                    to={`/profile/${user.id}`}
+                    className="block px-4 py-2 text-blue-500"
+                  >
+                    Settings
+                  </Link>
+                  <button
+                    className="w-full px-4 py-2 text-left text-red-500"
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <Link to="/login" className="text-sm font-medium text-blue-600">
+              Sign In
+            </Link>
+          )}
+
+          {/* Mobile Menu Toggle */}
+          <button className="md:hidden" onClick={() => setShowMenu(!showMenu)}>
+            {showMenu ? <FaTimes size={22} /> : <FaBars size={22} />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Menu */}
       {showMenu && (
         <ul className="absolute left-0 top-full flex w-full flex-col items-center space-y-4 bg-white py-4 text-sm font-medium uppercase text-gray-700 shadow-md md:hidden">
-          <li className="text-blue-500">Home</li>
-          <li>Services</li>
-          <li>Products</li>
-          <li>Watches</li>
-          <li>Sale</li>
-          <li>Blog</li>
-          <li>Pages</li>
+          <Link to="/" className="hover:text-blue-500">
+            Home
+          </Link>
+          <Link to="/services" className="hover:text-blue-500">
+            Services
+          </Link>
+          <Link to="/products" className="hover:text-blue-500">
+            Products
+          </Link>
+          <Link to="/about" className="hover:text-blue-500">
+            About
+          </Link>
+          <Link to="/contact" className="hover:text-blue-500">
+            Contact
+          </Link>
         </ul>
-      )}
-
-      {/* Search Input */}
-      {showSearch && (
-        <div className="absolute right-6 top-full mt-2 bg-white p-2 shadow-md">
-          <input
-            type="text"
-            placeholder="Search..."
-            className="rounded-md border border-gray-300 px-3 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
       )}
     </nav>
   );

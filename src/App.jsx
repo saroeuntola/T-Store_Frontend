@@ -28,6 +28,7 @@ import AddBanner from "views/admin/banner/AddBanner";
 import EditBanner from "views/admin/banner/EditBanner";
 import About from "views/pages/About";
 import Contact from "views/pages/Contact";
+import Cart from "views/pages/Cart";
 
 
 const App = () => {
@@ -35,14 +36,15 @@ const App = () => {
   const isDashboardRoute =
     location.pathname.startsWith("/admin") ||
     location.pathname.startsWith("/rtl") ||
-    location.pathname.startsWith("/add") || 
-    location.pathname.startsWith("/edit") || 
+    location.pathname.startsWith("/add") ||
+    location.pathname.startsWith("/edit") ||
     location.pathname === "/login" ||
     location.pathname === "/register" ||
     location.pathname === "/unauthorized" ||
     location.pathname === "/404" ||
     location.pathname.startsWith("/profile");
-  
+
+  const hideFooter = isDashboardRoute || location.pathname === "/cart";
   return (
     <main>
       {/* Conditionally render Navbar and Footer */}
@@ -55,6 +57,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/cart" element={<Cart />} />
         {/* Private Routes */}
         <Route
           path="/profile/:id"
@@ -172,10 +175,11 @@ const App = () => {
           path="/add_banner"
           element={
             <ProtectedRoute requiredRoles={["admin", "manager"]}>
-              <AddBanner/>
+              <AddBanner />
             </ProtectedRoute>
           }
         />
+
         {/* Unauthorized Route */}
         <Route path="/unauthorized" element={<Unauthorized />} />
 
@@ -184,7 +188,7 @@ const App = () => {
       </Routes>
 
       {/* Conditionally render Footer */}
-      {!isDashboardRoute && <Footer />}
+      {!hideFooter && <Footer />}
     </main>
   );
 };

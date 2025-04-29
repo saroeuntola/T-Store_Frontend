@@ -1,5 +1,4 @@
-
-const { baseURL } = require("service/baseURL");
+import { baseURL } from "service/baseURL";
 
 const getUser = async (token) => {
  

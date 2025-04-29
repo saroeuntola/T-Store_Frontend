@@ -1,5 +1,6 @@
 import { deleteCategory } from 'config_API/category_api';
 import { getCategory } from 'config_API/category_api'
+import { deleteColor } from 'config_API/Color_api';
 import { getColor } from 'config_API/Color_api';
 import { deleteSize } from 'config_API/Size_api';
 import { getSize } from 'config_API/Size_api';
@@ -31,7 +32,7 @@ const Color = () => {
         });
 
         if (result.isConfirmed) {
-            await deleteSize(token, id);
+            await deleteColor(token, id);
             setColor((prevColors) =>
               prevColors.filter((item) => item.id !== id)
             );

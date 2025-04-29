@@ -3,7 +3,6 @@ import WeeklyRevenue from "views/admin/default/components/WeeklyRevenue";
 import TotalSpent from "views/admin/default/components/TotalSpent";
 import PieChartCard from "views/admin/default/components/PieChartCard";
 import { IoMdHome } from "react-icons/io";
-import { IoDocuments } from "react-icons/io5";
 import { MdBarChart, MdDashboard } from "react-icons/md";
 
 import { columnsDataCheck, columnsDataComplex } from "./variables/columnsData";
@@ -18,34 +17,42 @@ import tableDataComplex from "./variables/tableDataComplex.json";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import InfoUser from "config_API/infoUser";
-
-
-
-
-
-
+import { getAccessToken } from "service/Auth";
+import { getCount } from "config_API/Auth_api";
 
 
 const Dashboard = () => {
+  const [authorized, setAuthorized] = useState(true);
+  const navigate = useNavigate();
+  const user = InfoUser();
+  const token = getAccessToken();
+  const [Counts, setCounts] = useState([]);
 
-const [authorized,setAuthorized]= useState(true);
-const navigate = useNavigate();
-const user = InfoUser();
-
-useEffect(() => {
-  const can = (role) => (user?.Roles || []).includes(role);
-  if (user) {
-    if (!can("admin") && !can("manager")) {
-      setAuthorized(false);
+  useEffect(() => {
+    const can = (role) => (user?.Roles || []).includes(role);
+    if (user) {
+      if (!can("admin") && !can("manager")) {
+        setAuthorized(false);
+      }
     }
-  }
-  if (!authorized) {
-    navigate("/unauthorized");
-  }
+    if (!authorized) {
+      navigate("/unauthorized");
+    }
+  }, [user, authorized, navigate]);
 
-}, [user, authorized, navigate]);
+ useEffect(() => {
+   const fetchData = async () => {
+     try {
+     const response = await getCount(token);
+       setCounts(response.data);
+      
+     } catch (error) {
+       console.error("Error fetching counts:", error);
+     }
+   };
 
-
+   fetchData();
+ }, [token]);
 
 
   return (
@@ -53,33 +60,36 @@ useEffect(() => {
       <div className="mt-3 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-3 3xl:grid-cols-6">
         <Widget
           icon={<MdBarChart className="h-7 w-7" />}
-          title={"Earnings"}
-          subtitle={"$340.5"}
-        />
-        <Widget
-          icon={<IoDocuments className="h-6 w-6" />}
-          title={"Spend this month"}
-          subtitle={"$642.39"}
+          title={"Users"}
+          subtitle={Counts.total_users}
         />
         <Widget
           icon={<MdBarChart className="h-7 w-7" />}
-          title={"Sales"}
-          subtitle={"$574.34"}
+          title={"Products"}
+          subtitle={Counts.total_products}
+        />
+
+        <Widget
+          icon={<MdBarChart className="h-7 w-7" />}
+          title={"Order"}
+          subtitle={Counts.total_orders}
         />
         <Widget
           icon={<MdDashboard className="h-6 w-6" />}
-          title={"Your Balance"}
-          subtitle={"$1,000"}
+          title={"Category"}
+          subtitle={Counts.total_category}
         />
         <Widget
           icon={<MdBarChart className="h-7 w-7" />}
-          title={"New Tasks"}
-          subtitle={"145"}
+          title={"Colors"}
+          subtitle={Counts.total_colors}
         />
         <Widget
           icon={<IoMdHome className="h-6 w-6" />}
-          title={"Total Projects"}
-          subtitle={"$2433"}
+          title={"Sizes"}
+          subtitle={
+            Counts.total_sizes
+          }
         />
       </div>
 

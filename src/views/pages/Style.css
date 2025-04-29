@@ -1,0 +1,119 @@
+#khqrCard {
+    position: relative; /* inside donation page */
+    margin: 30px auto 0 auto; /* top margin + center horizontally */
+}
+
+.khqr-card {
+    width: 270px;
+    height: 430px;
+    background-color: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0px 4px 12px rgba(0,0,0,0.15);
+}
+.logo {
+    width: 75px; /* Change as needed */
+    height: auto; /* Maintain aspect ratio */
+    display: block;
+    margin: 0 auto; /* Center it */
+}
+.khqr-header {
+    background-color: #E1232E;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.khqr-logo {
+    /* width: 100px; 
+    height: 30px;
+    background-image: url('./assets/KHQR-Logo.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 0 auto;  */
+}
+.bebas-neue-regular {
+    font-size: 12px;
+    font-weight: bold;
+    color: #000000;
+    font-weight: 600;
+    margin-right:45%;
+  }
+.khqr-body {
+    flex: 1;
+    padding: 20px 20px 0 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.receiver-name {
+    font-size: 24px;
+    font-weight: bold;
+    color: #000000;
+    font-weight: 600;
+    margin-top: 10px;
+    margin-right:50%;
+}
+
+.amount {
+    font-size: 26px;
+    font-weight: bold;
+    margin: 8px 0;
+    color: black;
+    margin-right:50%;
+}
+
+.divider {
+    width: 100%;
+    border-top: 1px dashed #bbb;
+    margin: 10px 0;
+}
+
+.qrcode-area {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 20px;
+}
+
+.qrcode-wrapper {
+    position: relative;
+    width: 200px;
+    height: 200px;
+}
+
+#qrcode {
+    width: 200px !important;
+    height: 200px !important;
+}
+
+.qrcode-center-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 30px;
+    height: 30px;
+    background-color: black;
+    border: 3px solid white; /* Add white border */
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.currency-symbol {
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    font-family: Arial, sans-serif;
+}

@@ -1,99 +1,100 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
-import { getProduct } from "config_API/Product_api";
 import { urlProductImage } from "service/baseURL";
+import { getBanner } from "config_API/Banner_api";
+import { urlBannerImage } from "service/baseURL";
+import { Link } from "react-router-dom";
+import { getProductLimit } from "config_API/Product_api";
+import { CartContext } from "./Context/CartProvider";
+import Swal from "sweetalert2";
 
 const Home = () => {
   const [products, setProducts] = useState([]);
+  const [banners, setBanners] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const [bannerLoading, setBannerLoading] = useState(true);
+  const { addToCart } = useContext(CartContext);
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchProductsAndBanners = async () => {
       try {
-        const response = await getProduct();
-        setProducts(response.product);
-        console.log(response.product);
+        const [response, resBanner] = await Promise.all([
+          getProductLimit(),
+          getBanner(),
+        ]);
+
+        setProducts(response.product || []);
+        setBanners(resBanner.banner || []);
       } catch (error) {
-        console.error("Error fetching products:", error);
+        console.error("Error fetching data:", error);
       } finally {
         setLoading(false);
+        setBannerLoading(false);
       }
     };
 
-    fetchProducts();
+    fetchProductsAndBanners();
   }, []);
 
   return (
-    <div className="bg-gray-50">
-      {/* Hero Section with Slideshow (STATIC) */}
-      <div className="relative h-[60vh] w-full">
-        <Swiper
-          modules={[Navigation, Autoplay]}
-          navigation
-          autoplay={{ delay: 3000 }}
-          loop
-          className="h-full w-full"
-        >
-          {/* Slide 1 */}
-          <SwiperSlide>
-            <div className="flex h-[50vh] w-full flex-col items-center justify-between bg-gray-200 p-6 md:flex-row">
-              <div className="max-w-lg text-center md:text-left">
-                <h1 className="text-4xl font-semibold text-gray-800 md:text-5xl">
-                  YOUR PRODUCTS <br /> ARE GREAT.
-                </h1>
-                <button className="mt-6 rounded-lg bg-blue-500 px-6 py-3 font-medium text-white shadow-md transition hover:bg-blue-600">
-                  SHOP PRODUCT
-                </button>
-              </div>
-              <img
-                src="https://via.placeholder.com/400x300"
-                alt="Product 1"
-                className="w-80 rounded-lg object-cover shadow-lg md:w-96"
-              />
-            </div>
-          </SwiperSlide>
-
-          {/* Slide 2 */}
-          <SwiperSlide>
-            <div className="flex h-[50vh] w-full flex-col items-center justify-between bg-gray-300 p-6 md:flex-row">
-              <div className="max-w-lg text-center md:text-left">
-                <h1 className="text-4xl font-semibold text-gray-800 md:text-5xl">
-                  NEW COLLECTION <br /> JUST ARRIVED!
-                </h1>
-                <button className="mt-6 rounded-lg bg-green-500 px-6 py-3 font-medium text-white shadow-md transition hover:bg-green-600">
-                  EXPLORE NOW
-                </button>
-              </div>
-              <img
-                src="https://via.placeholder.com/400x300"
-                alt="Product 2"
-                className="w-80 rounded-lg object-cover shadow-lg md:w-96"
-              />
-            </div>
-          </SwiperSlide>
-
-          {/* Slide 3 */}
-          <SwiperSlide>
-            <div className="flex h-[50vh] w-full flex-col items-center justify-between bg-gray-400 p-6 md:flex-row">
-              <div className="max-w-lg text-center md:text-left">
-                <h1 className="text-4xl font-semibold text-gray-800 md:text-5xl">
-                  EXCLUSIVE DEALS <br /> FOR YOU!
-                </h1>
-                <button className="mt-6 rounded-lg bg-red-500 px-6 py-3 font-medium text-white shadow-md transition hover:bg-red-600">
-                  CHECK OFFERS
-                </button>
-              </div>
-              <img
-                src="https://via.placeholder.com/400x300"
-                alt="Product 3"
-                className="w-80 rounded-lg object-cover shadow-lg md:w-96"
-              />
-            </div>
-          </SwiperSlide>
-        </Swiper>
+    <div className="bg-gray-50 py-10">
+      {/* Hero Section with Slideshow (DYNAMIC) */}
+      <div className="relative w-full" style={{ height: "312px" }}>
+        {bannerLoading ? (
+          <div className="flex h-[60vh] items-center justify-center text-lg text-gray-600">
+            Loading Banners...
+          </div>
+        ) : (
+          <Swiper
+            modules={[Navigation, Autoplay]}
+            navigation
+            autoplay={{ delay: 3000 }}
+            loop
+            className="h-full w-full"
+          >
+            {banners.length > 0 ? (
+              banners.map((banner) => (
+                <SwiperSlide key={banner.id}>
+                  <div className="flex h-full w-full flex-col items-center justify-between py-6 md:flex-row">
+                    {/* <div className="max-w-lg text-center md:text-left">
+                      <h1 className="text-4xl font-semibold text-gray-800 md:text-5xl">
+                        {banner.title}
+                      </h1>
+                      <p className="mt-2 text-gray-600">{banner.description}</p>
+                      {banner.link && (
+                        <Link
+                          to={banner.link}
+                          className="mt-4 inline-block rounded-lg bg-blue-500 px-6 py-3 font-medium text-white shadow-md transition hover:bg-blue-600"
+                        >
+                          Learn More
+                        </Link>
+                      )}
+                    </div> */}
+                    <img
+                      src={
+                        banner.banner_image
+                          ? `${urlBannerImage}${banner.banner_image}`
+                          : "https://via.placeholder.com/820x312"
+                      }
+                      alt={banner.title}
+                      className="h-full w-full object-contain"
+                    />
+                  </div>
+                </SwiperSlide>
+              ))
+            ) : (
+              <SwiperSlide>
+                <div className="flex h-[50vh] w-full items-center justify-center bg-gray-300">
+                  <p className="text-xl font-semibold text-gray-700">
+                    No Banners Available
+                  </p>
+                </div>
+              </SwiperSlide>
+            )}
+          </Swiper>
+        )}
       </div>
 
       {/* Benefits Section */}
@@ -163,7 +164,21 @@ const Home = () => {
                     </span>
                   </div>
 
-                  <button className="mt-4 w-full rounded-lg bg-gradient-to-r from-yellow-400 to-yellow-500 px-5 py-2 text-sm font-medium text-black shadow-md transition hover:from-yellow-500 hover:to-yellow-600 hover:shadow-lg">
+                  <button
+                    className="mt-4 w-full rounded-lg bg-gradient-to-r from-yellow-400 to-yellow-500 px-5 py-2 text-sm font-medium text-black shadow-md transition hover:from-yellow-500 hover:to-yellow-600 hover:shadow-lg"
+                    onClick={() => {
+                      addToCart(product);
+                      Swal.fire({
+                        icon: "success",
+                        title: "Added to Cart!",
+                        text: `"${product.name}" has been added to your cart.`,
+                        showConfirmButton: false,
+                        timer: 2500,
+                        toast: true,
+                        position: "center",
+                      });
+                    }}
+                  >
                     Add to Cart
                   </button>
                 </div>

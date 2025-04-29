@@ -190,7 +190,7 @@ const EditProduct = () => {
             <Label value="Product Price ($)" />
             <TextInput
               {...register("price", { required: "Price is required" })}
-              type="number"
+              type="text"
             />
             {errors.price && (
               <p className="text-red-500">{errors.price.message}</p>

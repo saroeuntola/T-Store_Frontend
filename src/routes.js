@@ -23,6 +23,7 @@ import Brand from "views/admin/brand/Brand";
 import { ImFontSize } from "react-icons/im";
 
 
+
 const routes = [
   {
     name: "Dashboard",
@@ -30,6 +31,15 @@ const routes = [
     path: "default",
     icon: <FaHome size={23} />,
     component: <MainDashboard />,
+    // hidden:
+    //   can("user-list") ||
+    //   can("role-list") ||
+    //   can("product-list") ||
+    //   can("banner-list") ||
+    //   can("brand-list" || can("size-list")) ||
+    //   can("color-list" || can("category-list") || can("order-list"))
+    //     ? false
+    //     : true,
   },
   {
     name: "User",
@@ -37,6 +47,7 @@ const routes = [
     path: "users",
     icon: <FaUser size={23} />,
     component: <User />,
+    // hidden: !can("user-list"),
   },
   {
     name: "Role",
@@ -44,6 +55,7 @@ const routes = [
     icon: <FaAward size={23} />,
     path: "role",
     component: <Role />,
+    // hidden: !can("role-list"),
   },
   {
     name: "Product",
@@ -56,7 +68,7 @@ const routes = [
   {
     name: "Category",
     layout: "/admin",
-    path: "category",
+    path: "category", 
     icon: <FaTags size={23} />,
     component: <Category />,
     secondary: true,

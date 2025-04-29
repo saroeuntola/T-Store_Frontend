@@ -1,4 +1,5 @@
-const { baseURL } = require("service/baseURL");
+import { baseURL } from "service/baseURL";
+
 
 const getRole = async (token) => {
   try {

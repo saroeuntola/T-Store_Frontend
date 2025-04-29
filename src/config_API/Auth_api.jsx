@@ -33,5 +33,16 @@ const getMyInfo = async (token) => {
     return error.response;
   }
 };
-
-export {createAcc, login,getMyInfo};
+const getCount = async (token) => {
+  try {
+    const response = await baseURL.get("/count", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+export {createAcc, login,getMyInfo,getCount};

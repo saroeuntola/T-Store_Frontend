@@ -1,6 +1,26 @@
-const { baseURL } = require("service/baseURL");
+import { baseURL } from "service/baseURL";
 
 
+const getProductCount = async (token) => {
+  try {
+    const response = await baseURL.post("/products/count", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    return error.response;
+  }
+};
+const getProductLimit = async () => {
+  try {
+    const response = await baseURL.get("/products/list?limit=8");
+    return response.data;
+  } catch (error) {
+    return error.response;
+  }
+};
 const getProduct = async () =>{
     try{
         const response = await baseURL.get('/products/list');
@@ -81,6 +101,8 @@ export {
     updateProduct,
     deleteProduct,
     updateStatus,
+    getProductCount,
+    getProductLimit,
   };
 
 
