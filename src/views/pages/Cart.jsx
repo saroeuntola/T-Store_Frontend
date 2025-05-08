@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { CartContext } from "../pages/Context/CartProvider"; // Adjust if needed
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaPlus, FaMinus, FaTrash } from "react-icons/fa";
 import { urlProductImage } from "service/baseURL";
 import Swal from "sweetalert2";
@@ -10,11 +10,15 @@ import {BakongKHQR, khqrData, IndividualInfo} from
 import QRCode from "qrcode"
 import './Style.css';
 import { checkTransaction } from "config_API/Bakong_API";
+import bakongLogo from "./images/bakong_Logo.png"
+import { getAccessToken } from "service/Auth";
 
 const Cart = () => {
   const { cartItems, addToCart, removeFromCart, clearCart, getCartTotal } =
     useContext(CartContext);
+
   const handleApprove = (data, actions) => {
+    
     return actions.order.capture().then((details) => {
       Swal.fire({
         title: "Transaction Successful!",
@@ -26,6 +30,7 @@ const Cart = () => {
       clearCart();
     });
   };
+
 
  const checkoutBakong = async () => {
    const duration = 2 * 60;
@@ -40,7 +45,7 @@ const Cart = () => {
      terminalLabel: "Cashier_1",
      expirationTimestamp: Date.now() + duration * 1000,
    };
-
+  
    const individualInfo = new IndividualInfo(
      "lim_laykuong@wing",
      "lim laykuong",
@@ -167,8 +172,23 @@ const Cart = () => {
                   <div>
                     <h4 className="text-lg font-semibold">{item.name}</h4>
                     <p className="text-gray-500">Price ${item.price}</p>
+
+                    {/* ✅ Show selected colors */}
+                    {item.selectedColors?.length > 0 && (
+                      <p className="text-sm text-gray-600">
+                        Colors: {item.selectedColors.join(", ")}
+                      </p>
+                    )}
+
+                    {/* ✅ Show selected sizes */}
+                    {item.selectedSizes?.length > 0 && (
+                      <p className="text-sm text-gray-600">
+                        Sizes: {item.selectedSizes.join(", ")}
+                      </p>
+                    )}
                   </div>
                 </div>
+
                 <div className="flex items-center space-x-2">
                   <button
                     onClick={() => removeFromCart(item, -1)}
@@ -193,7 +213,6 @@ const Cart = () => {
                 </div>
               </div>
             ))}
-
             <button
               onClick={() => {
                 clearCart();
@@ -231,10 +250,15 @@ const Cart = () => {
             </div>
 
             <button
-              className="mb-3 mt-4 w-full rounded bg-red-800 px-4 py-2 text-white hover:bg-red-600"
+              className="mb-3 mt-4 flex w-full items-center justify-center gap-2 rounded-3xl bg-red-800 px-4 py-2 text-white hover:bg-red-900"
               onClick={checkoutBakong}
             >
-              Bakong KHQR
+              <img
+                src={bakongLogo}
+                alt="Bakong"
+                className="h-6 w-6 rounded-full"
+              />
+              Bakong
             </button>
 
             <div className="paypal_checkout">

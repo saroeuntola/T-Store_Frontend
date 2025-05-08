@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 import { getProductLimit } from "config_API/Product_api";
 import { CartContext } from "./Context/CartProvider";
 import Swal from "sweetalert2";
+import { SearchContext } from "./Context/SearchContext";
 
 const Home = () => {
   const [products, setProducts] = useState([]);
@@ -17,6 +18,7 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [bannerLoading, setBannerLoading] = useState(true);
   const { addToCart } = useContext(CartContext);
+   const { searchQuery } = useContext(SearchContext);
   useEffect(() => {
     const fetchProductsAndBanners = async () => {
       try {
@@ -37,11 +39,21 @@ const Home = () => {
 
     fetchProductsAndBanners();
   }, []);
+  const searchProduct = products.filter((item) => {
+    const search = searchQuery.toLowerCase();
+    return (
+      String(item.id).toLowerCase().includes(search) ||
+      String(item.name).toLowerCase().includes(search) ||
+      String(item.description).toLowerCase().includes(search) ||
+      String(item.category).toLowerCase().includes(search) ||
+      String(item.price).toLowerCase().includes(search)
+    );
+  });
 
   return (
     <div className="bg-gray-50 py-10">
       {/* Hero Section with Slideshow (DYNAMIC) */}
-      <div className="relative w-full" style={{ height: "312px" }}>
+      <div className="relative w-full" style={{ height: "512px" }}>
         {bannerLoading ? (
           <div className="flex h-[60vh] items-center justify-center text-lg text-gray-600">
             Loading Banners...
@@ -126,64 +138,72 @@ const Home = () => {
           <div className="text-center text-gray-500">Loading products...</div>
         ) : (
           <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4">
-            {products.map((product) => (
-              <div
-                key={product.id}
-                className="relative overflow-hidden rounded-lg bg-white shadow-md transition hover:shadow-lg"
-              >
-                <img
-                  src={
-                    product.image
-                      ? `${urlProductImage}${product.image}`
-                      : "https://via.placeholder.com/400x300"
-                  }
-                  alt={product.name}
-                  className="h-56 w-full object-cover"
-                />
-                <div className="rounded-lg bg-white p-5 shadow-lg transition-shadow duration-300 hover:shadow-2xl">
-                  <h3 className="text-lg font-semibold text-gray-900">
-                    {product.name}
-                  </h3>
-                  <p className="mt-1 line-clamp-2 text-sm text-gray-500">
-                    {product.description}
-                  </p>
+            {searchProduct && searchProduct.length === 0 ? (
+              <p className=" text-lg text-gray-900">No products found</p>
+            ) : (
+              searchProduct.map((product) => (
+                <div
+                  key={product.id}
+                  className="relative overflow-hidden rounded-lg bg-white shadow-md transition hover:shadow-lg"
+                >
+                  <Link to={`/product/${product.id}`}>
+                    <img
+                      src={
+                        product.image
+                          ? `${urlProductImage}${product.image}`
+                          : "https://via.placeholder.com/400x300"
+                      }
+                      alt={product.name}
+                      className="h-56 w-full object-cover"
+                    />
+                  </Link>
 
-                  <div className="mt-4 flex items-center justify-between">
-                    <span className="text-xl font-bold text-blue-600">
-                      ${product.price}
-                    </span>
+                  <div className="rounded-lg bg-white p-5 shadow-lg transition-shadow duration-300 hover:shadow-2xl">
+                    <h3 className="text-lg font-semibold text-gray-900">
+                      {product.name}
+                    </h3>
+                    <p className="mt-1 line-clamp-2 text-sm text-gray-500">
+                      {product.description}
+                    </p>
 
-                    <span
-                      className={`rounded-full px-3 py-1 text-sm font-semibold ${
-                        product.status === "Instock"
-                          ? "bg-green-100 text-green-700"
-                          : "bg-red-100 text-red-700"
-                      }`}
+                    <div className="mt-4 flex items-center justify-between">
+                      <span className="text-xl font-bold text-blue-600">
+                        ${product.price}
+                      </span>
+
+                      <span
+                        className={`rounded-full px-3 py-1 text-sm font-semibold ${
+                          product.status === "Instock"
+                            ? "bg-green-100 text-green-700"
+                            : "bg-red-100 text-red-700"
+                        }`}
+                      >
+                        {product.status}
+                      </span>
+                    </div>
+
+                    <button
+                      className="mt-4 w-full rounded-2xl bg-blue-500 px-5 py-2 text-white shadow-md transition hover:bg-yellow-500"
+                      onClick={() => {
+                        addToCart(product);
+                        Swal.fire({
+                          icon: "success",
+                          title: "Added to Cart!",
+                          text: `"${product.name}" has been added to your cart.`,
+                          showConfirmButton: false,
+                          timer: 2500,
+                          toast: true,
+                          position: "center",
+                        });
+                      }}
                     >
-                      {product.status}
-                    </span>
+                      Add to Cart
+                    </button>
                   </div>
-
-                  <button
-                    className="mt-4 w-full rounded-lg bg-gradient-to-r from-yellow-400 to-yellow-500 px-5 py-2 text-sm font-medium text-black shadow-md transition hover:from-yellow-500 hover:to-yellow-600 hover:shadow-lg"
-                    onClick={() => {
-                      addToCart(product);
-                      Swal.fire({
-                        icon: "success",
-                        title: "Added to Cart!",
-                        text: `"${product.name}" has been added to your cart.`,
-                        showConfirmButton: false,
-                        timer: 2500,
-                        toast: true,
-                        position: "center",
-                      });
-                    }}
-                  >
-                    Add to Cart
-                  </button>
                 </div>
-              </div>
-            ))}
+              ))
+            )}
+            ;
           </div>
         )}
       </div>

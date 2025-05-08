@@ -2,10 +2,12 @@ import { getMyInfo } from "config_API/Auth_api";
 import { removeToken, getAccessToken } from "service/Auth";
 import { urlUserImage } from "service/baseURL";
 import React, { useState, useEffect, useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { HiSearch } from "react-icons/hi";
 import { FaShoppingCart, FaBars, FaTimes, FaUserCircle } from "react-icons/fa";
 import { CartContext } from "./Context/CartProvider";
+import { SearchContext } from "./Context/SearchContext";
+import brand from "./images/brand.png"
 
 const Navbar = () => {
   const [showMenu, setShowMenu] = useState(false);
@@ -24,14 +26,22 @@ const Navbar = () => {
           setUser(response?.data);
           setIsLoggedIn(true);
         } catch (error) {
-          console.error("Error fetching user info:", error);
+          console.error("Unauthorized:", error);
+          removeToken();
+          setUser({});
           setIsLoggedIn(false);
         }
+      } else {
+        setIsLoggedIn(false); // No token? Not logged in.
       }
     };
     fetchMyInfo();
   }, [token]);
 
+    const { searchQuery, setSearchQuery } = useContext(SearchContext);
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value);
+  };
   const handleLogout = () => {
     removeToken();
     setIsLoggedIn(false);
@@ -40,47 +50,91 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="fixed z-50 w-full bg-yellow-300 shadow-md">
+    <nav className="fixed z-50 w-full bg-yellow-400 shadow-md">
       <div className="flex items-center justify-between px-6 py-4 md:px-20">
-        {/* Logo */}
-        <Link to="/" className="text-2xl font-semibold">
-          TStore<span className="text-blue-500">.</span>
+        <Link
+          to="/"
+          className="flex flex-1 items-center space-x-2 text-2xl font-semibold"
+        >
+          <img
+            src={brand}
+            alt="TStore Logo"
+            className="h-10 w-10 rounded-full"
+          />
+          <span>
+            TStore<span className="text-blue-500">.</span>
+          </span>
         </Link>
-
         {/* Desktop Menu */}
-        <ul className="hidden space-x-6 text-sm font-medium uppercase text-gray-700 md:flex">
-          <Link to="/" className="hover:text-blue-500">
+        <ul className="text-gray hidden space-x-6 text-sm font-medium uppercase md:flex">
+          <NavLink
+            to="/"
+            className={({ isActive }) =>
+              `border-b-2 pb-1 hover:text-blue-500 ${
+                isActive
+                  ? "border-blue-600 font-semibold text-blue-700"
+                  : "border-transparent"
+              }`
+            }
+          >
             Home
-          </Link>
-          <Link to="/services" className="hover:text-blue-500">
-            Services
-          </Link>
-          <Link to="/products" className="hover:text-blue-500">
+          </NavLink>
+
+          <NavLink
+            to="/shop"
+            className={({ isActive }) =>
+              `border-b-2 pb-1 hover:text-blue-500 ${
+                isActive
+                  ? "border-blue-600 font-semibold text-blue-700"
+                  : "border-transparent"
+              }`
+            }
+          >
             Products
-          </Link>
-          <Link to="/about" className="hover:text-blue-500">
+          </NavLink>
+          <NavLink
+            to="/about"
+            className={({ isActive }) =>
+              `border-b-2 pb-1 hover:text-blue-500 ${
+                isActive
+                  ? "border-blue-600 font-semibold text-blue-700"
+                  : "border-transparent"
+              }`
+            }
+          >
             About
-          </Link>
-          <Link to="/contact" className="hover:text-blue-500">
+          </NavLink>
+          <NavLink
+            to="/contact"
+            className={({ isActive }) =>
+              `border-b-2 pb-1 hover:text-blue-500 ${
+                isActive
+                  ? "border-blue-600 font-semibold text-blue-700"
+                  : "border-transparent"
+              }`
+            }
+          >
             Contact
-          </Link>
+          </NavLink>
         </ul>
 
         {/* Icons & Mobile Menu Button */}
-        <div className="flex items-center space-x-4">
+        <div className="ms-6 flex items-center space-x-4">
           {/* Search */}
           <div className="relative hidden md:block">
             <input
+              onChange={handleSearch}
               type="text"
+              value={searchQuery}
               placeholder="Search..."
-              className="w-60 rounded-lg border px-3 py-2 text-sm focus:outline-none"
+              className="w-60 rounded-2xl border-none px-3 py-2 text-sm"
             />
             <HiSearch className="absolute right-3 top-3 text-gray-500" />
           </div>
 
           {/* Cart */}
           <Link to="/cart" className="relative">
-            <FaShoppingCart sixe={30} className="cursor-pointer text-lg text-gray-700" />
+            <FaShoppingCart className="cursor-pointer text-2xl" />
             {cartItems.length > 0 && (
               <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white">
                 {cartItems.length}
@@ -96,7 +150,7 @@ const Navbar = () => {
               >
                 {user.profile ? (
                   <img
-                    className="h-10 w-10 rounded-full border"
+                    className="h-9 w-9 rounded-full"
                     src={`${urlUserImage}${user.profile}`}
                     alt="profile"
                   />
@@ -123,7 +177,10 @@ const Navbar = () => {
               )}
             </div>
           ) : (
-            <Link to="/login" className="text-sm font-medium text-blue-600">
+            <Link
+              to="/login"
+              className="rounded-md border border-blue-600 px-4 py-1.5 text-sm font-semibold text-blue-600 transition duration-200 hover:bg-blue-600 hover:text-white"
+            >
               Sign In
             </Link>
           )}
@@ -138,21 +195,55 @@ const Navbar = () => {
       {/* Mobile Menu */}
       {showMenu && (
         <ul className="absolute left-0 top-full flex w-full flex-col items-center space-y-4 bg-white py-4 text-sm font-medium uppercase text-gray-700 shadow-md md:hidden">
-          <Link to="/" className="hover:text-blue-500">
+          <NavLink
+            to="/"
+            className={({ isActive }) =>
+              `border-b-2 pb-1 hover:text-blue-500 ${
+                isActive
+                  ? "border-blue-600 font-semibold text-blue-700"
+                  : "border-transparent"
+              }`
+            }
+          >
             Home
-          </Link>
-          <Link to="/services" className="hover:text-blue-500">
-            Services
-          </Link>
-          <Link to="/products" className="hover:text-blue-500">
+          </NavLink>
+
+          <NavLink
+            to="/shop"
+            className={({ isActive }) =>
+              `border-b-2 pb-1 hover:text-blue-500 ${
+                isActive
+                  ? "border-blue-600 font-semibold text-blue-700"
+                  : "border-transparent"
+              }`
+            }
+          >
             Products
-          </Link>
-          <Link to="/about" className="hover:text-blue-500">
+          </NavLink>
+          <NavLink
+            to="/about"
+            className={({ isActive }) =>
+              `border-b-2 pb-1 hover:text-blue-500 ${
+                isActive
+                  ? "border-blue-600 font-semibold text-blue-700"
+                  : "border-transparent"
+              }`
+            }
+          >
             About
-          </Link>
-          <Link to="/contact" className="hover:text-blue-500">
+          </NavLink>
+          <NavLink
+            to="/contact"
+            className={({ isActive }) =>
+              `border-b-2 pb-1 hover:text-blue-500 ${
+                isActive
+                  ? "border-blue-600 font-semibold text-blue-700"
+                  : "border-transparent"
+              }`
+            }
+          >
             Contact
-          </Link>
+          </NavLink>
         </ul>
       )}
     </nav>

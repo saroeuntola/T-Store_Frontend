@@ -1,42 +1,83 @@
-import React from 'react';
-import { Card } from 'flowbite-react';
-
+import React from "react";
+import seo from "./images/seo.png"
+import tola from "./images/tola.jpg";
+import koung from "./images/koung.jpg";
 const About = () => {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-blue-500 to-indigo-600 p-6">
-      <Card className="max-w-4xl w-full shadow-xl p-8 rounded-lg bg-white">
-        <h2 className="text-4xl font-extrabold text-center text-gray-900">About Us</h2>
-        <p className="mt-4 text-gray-700 text-center text-lg">
-          Welcome to our platform! We are passionate about delivering the best experience to our users.
-          Our mission is to create innovative solutions that drive engagement and efficiency.
-        </p>
-        
-        <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="text-center p-6 border rounded-lg shadow-md bg-gray-50">
-            <h3 className="text-2xl font-semibold text-gray-800">Our Mission</h3>
-            <p className="text-gray-600 mt-2">
-              We strive for excellence by continuously improving and adapting to the ever-changing landscape of technology and user needs.
-            </p>
-          </div>
-          <div className="text-center p-6 border rounded-lg shadow-md bg-gray-50">
-            <h3 className="text-2xl font-semibold text-gray-800">Our Vision</h3>
-            <p className="text-gray-600 mt-2">
-              To be a leader in the industry by empowering our users with cutting-edge solutions that redefine convenience and efficiency.
-            </p>
-          </div>
-        </div>
+    <div className="container mx-auto px-4 py-12">
+      <h1 className="mb-8 mt-20 text-center text-4xl font-bold text-gray-800">
+        About T-Store
+      </h1>
 
-        <div className="mt-10 text-center">
-          <h3 className="text-2xl font-semibold text-gray-900">Meet Our Team</h3>
-          <p className="text-gray-600 mt-2">Our dedicated professionals work tirelessly to bring you the best experience.</p>
-          <div className="mt-6 flex flex-wrap justify-center gap-6">
-            <div className="w-40 h-40 bg-gray-200 rounded-full flex items-center justify-center text-gray-700 font-bold">CEO</div>
-            <div className="w-40 h-40 bg-gray-200 rounded-full flex items-center justify-center text-gray-700 font-bold">CTO</div>
-            <div className="w-40 h-40 bg-gray-200 rounded-full flex items-center justify-center text-gray-700 font-bold">Designer</div>
-            <div className="w-40 h-40 bg-gray-200 rounded-full flex items-center justify-center text-gray-700 font-bold">Developer</div>
+      <div className="mx-auto max-w-4xl space-y-6 text-lg text-gray-700">
+        <p>
+          <strong>T-Store</strong> is a modern online shopping destination
+          created to offer a seamless and secure experience for customers across
+          Cambodia. From electronics and fashion to daily essentials, we make
+          shopping simple and convenient.
+        </p>
+
+        <p>
+          Our mission is to provide high-quality products at fair prices, while
+          offering flexible and trusted payment methods like PayPal and Bakong
+          KHQR.
+        </p>
+
+        <p>
+          With fast delivery, friendly service, and a constantly growing
+          catalog, we’re proud to be a store that supports both convenience and
+          local innovation.
+        </p>
+      </div>
+
+      <div className="mx-auto mt-12 max-w-4xl">
+        <h2 className="mb-4 text-2xl font-semibold text-gray-800">
+          Our Core Values
+        </h2>
+        <ul className="list-disc space-y-2 pl-6 text-gray-700">
+          <li>✨ Customer-first service</li>
+          <li>🔒 Secure & flexible payments</li>
+          <li>🚚 Fast, reliable delivery</li>
+          <li>🌱 Supporting local tech growth</li>
+        </ul>
+      </div>
+
+      <div className="mx-auto mt-12 max-w-4xl">
+        <h2 className="mb-4 text-2xl font-semibold text-gray-800">
+          Meet the Team
+        </h2>
+        <div className="grid grid-cols-2 gap-6 sm:grid-cols-2 md:grid-cols-3">
+          <div className="rounded-lg bg-white p-4 text-center shadow">
+            <img
+              src={tola}
+              alt="John Doe"
+              className="mx-auto mb-2 h-24 w-24 rounded-full"
+            />
+            <h3 className="font-bold">Tola</h3>
+            <p className="text-sm text-gray-600">Backent Developer</p>
+          </div>
+
+          <div className="rounded-lg bg-white p-4 text-center shadow">
+            <img
+              src={koung}
+              alt="John Doe"
+              className="mx-auto mb-2 h-24 w-24 rounded-full"
+            />
+            <h3 className="font-bold">Koung</h3>
+            <p className="text-sm text-gray-600">Frontend Developer</p>
+          </div>
+
+          <div className="rounded-lg bg-white p-4 text-center shadow">
+            <img
+              src={seo}
+              alt="John Doe"
+              className="mx-auto mb-2 h-24 w-24 rounded-full"
+            />
+            <h3 className="font-bold">Jonh</h3>
+            <p className="text-sm text-gray-600">Founder & SEO</p>
           </div>
         </div>
-      </Card>
+      </div>
     </div>
   );
 };

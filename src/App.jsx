@@ -30,6 +30,9 @@ import About from "views/pages/About";
 import Contact from "views/pages/Contact";
 import Cart from "views/pages/Cart";
 
+import Shop from "views/pages/Product";
+import ProductDetail from "views/pages/ProductDetail";
+
 
 const App = () => {
   const location = useLocation();
@@ -58,6 +61,8 @@ const App = () => {
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/shop" element={<Shop />} />
+        <Route path="/product/:id" element={<ProductDetail />} />
         {/* Private Routes */}
         <Route
           path="/profile/:id"
