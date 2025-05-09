@@ -54,9 +54,9 @@ const Shop = () => {
 
   const priceFiltered = categoryFiltered.filter((product) => {
     const price = parseFloat(product.price);
-    if (selectedPriceRange === "Low") return price < 50;
-    if (selectedPriceRange === "Medium") return price >= 50 && price <= 150;
-    if (selectedPriceRange === "High") return price > 150;
+    if (selectedPriceRange === "Low") return price < 30;
+    if (selectedPriceRange === "Medium") return price >= 30 && price <= 100;
+    if (selectedPriceRange === "High") return price > 100;
     return true;
   });
 

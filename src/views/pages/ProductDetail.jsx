@@ -69,7 +69,7 @@ const ProductDetail = () => {
     return <div className="py-10 text-center">Product not found.</div>;
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-40 bg-gray-50">
+    <div className="mx-auto max-w-6xl px-4 py-40">
       <div className="grid grid-cols-1 gap-10 md:grid-cols-2">
         <img
           src={
@@ -81,9 +81,12 @@ const ProductDetail = () => {
           className="h-[400px] w-full rounded-lg object-cover"
         />
 
-        <div>
+        <div className="">
           <h1 className="text-3xl font-bold text-gray-800">{product.name}</h1>
-          <p className="mt-2 text-gray-600">{product.description}</p>
+          <p className="mt-2 max-w-prose break-words text-gray-600">
+            {product.description}
+          </p>
+
           <p className="mt-4 text-xl font-semibold text-blue-600">
             ${product.price}
           </p>

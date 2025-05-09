@@ -199,7 +199,7 @@ const AddProduct = () => {
                 required: "Price is required",
                 valueAsNumber: true,
               })}
-              type="number"
+              type="text"
               placeholder="Enter your Product Price"
               className="w-full"
             />
