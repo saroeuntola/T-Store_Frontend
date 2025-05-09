@@ -2,10 +2,8 @@ import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { Button, Label, TextInput } from "flowbite-react";
-import { createCategory } from "config_API/category_api";
 import { getAccessToken } from "service/Auth";
 import InfoUser from "config_API/infoUser";
-import { createProduct } from "config_API/Product_api";
 import { createSize } from "config_API/Size_api";
 import Swal from "sweetalert2";
 

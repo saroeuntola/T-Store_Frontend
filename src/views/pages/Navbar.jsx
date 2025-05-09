@@ -1,13 +1,14 @@
 import { getMyInfo } from "config_API/Auth_api";
 import { removeToken, getAccessToken } from "service/Auth";
 import { urlUserImage } from "service/baseURL";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, use } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { HiSearch } from "react-icons/hi";
 import { FaShoppingCart, FaBars, FaTimes, FaUserCircle } from "react-icons/fa";
 import { CartContext } from "./Context/CartProvider";
 import { SearchContext } from "./Context/SearchContext";
-import brand from "./images/brand.png"
+import { getBrand } from "config_API/Brand_api";
+import { urlBrandImage } from "service/baseURL";
 
 const Navbar = () => {
   const [showMenu, setShowMenu] = useState(false);
@@ -17,6 +18,20 @@ const Navbar = () => {
   const navigate = useNavigate();
   const token = getAccessToken();
     const { cartItems } = useContext(CartContext);
+const [brand, setBrand] = useState([])
+const fetchBrand = async () => {
+  try {
+    const response = await getBrand();
+    setBrand(response.brand[0]);
+    console.log (response.bran)
+  } catch (error) {
+    console.error("Failed to fetch brand:", error);
+  }
+};
+
+useEffect(() => {
+  fetchBrand();
+}, []);
 
   useEffect(() => {
     const fetchMyInfo = async () => {
@@ -56,13 +71,17 @@ const Navbar = () => {
           to="/"
           className="flex flex-1 items-center space-x-2 text-2xl font-semibold"
         >
-          <img
-            src={brand}
-            alt="TStore Logo"
-            className="h-10 w-10 rounded-full"
-          />
+          {brand.brand_image ? (
+            <img
+              src={`${urlBrandImage}${brand.brand_image}`}
+              alt="TStore Logo"
+              className="h-10 w-10 rounded-full"
+            />
+          ) : (
+            <div className="h-10 w-10 rounded-full bg-gray-300" />
+          )}
           <span>
-            TStore<span className="text-blue-500">.</span>
+            {brand.brand_name}<span className="text-blue-500">.</span>
           </span>
         </Link>
         {/* Desktop Menu */}

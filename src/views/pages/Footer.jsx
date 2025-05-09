@@ -1,5 +1,6 @@
 // Footer.jsx
 import React from "react";
+import { FaFacebook, FaFacebookF, FaGithub, FaLinkedin, FaLinkedinIn } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 
 const Footer = () => {
@@ -33,22 +34,23 @@ const Footer = () => {
             <h4 className="mb-4 text-lg font-semibold">Quick Links</h4>
             <ul className="space-y-2 text-gray-400">
               <li>
-                <Link to="/"  className="transition-colors hover:text-white">
+                <Link to="/" className="transition-colors hover:text-white">
                   Home
                 </Link>
               </li>
               <li>
-                <Link to="/about" className="transition-colors hover:text-white">
+                <Link
+                  to="/about"
+                  className="transition-colors hover:text-white"
+                >
                   About
                 </Link>
               </li>
               <li>
-                <a href="#" className="transition-colors hover:text-white">
-                  Services
-                </a>
-              </li>
-              <li>
-                <Link to="/contact" className="transition-colors hover:text-white">
+                <Link
+                  to="/contact"
+                  className="transition-colors hover:text-white"
+                >
                   Contact
                 </Link>
               </li>
@@ -65,25 +67,34 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Newsletter */}
           <div>
-            <h4 className="mb-4 text-lg font-semibold">Newsletter</h4>
-            <p className="mb-4 text-sm text-gray-400">
-              Subscribe to our newsletter for updates
-            </p>
-            <form className="flex flex-col gap-2 sm:flex-row">
-              <input
-                type="email"
-                placeholder="Your email"
-                className="rounded-md px-4 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400"
-              />
-              <button
-                type="submit"
-                className="rounded-md bg-blue-600 px-4 py-2 transition-colors hover:bg-blue-700"
+            <h4 className="mb-4 text-lg font-semibold">Follow us</h4>
+            <div className="flex space-x-4 text-xl text-gray-600">
+              <a
+                href="https://facebook.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-2xl text-blue-600  transition-colors hover:text-blue-200"
               >
-                Subscribe
-              </button>
-            </form>
+                <FaFacebook/>
+              </a>
+              <a
+                href="https://github.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray text-2xl  transition-colors hover:text-gray-100"
+              >
+                <FaGithub />
+              </a>
+              <a
+                href="https://linkedin.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-2xl text-blue-600 transition-colors hover:text-blue-700"
+              >
+                <FaLinkedin />
+              </a>
+            </div>
           </div>
         </div>
 

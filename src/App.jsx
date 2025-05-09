@@ -32,6 +32,8 @@ import Cart from "views/pages/Cart";
 
 import Shop from "views/pages/Product";
 import ProductDetail from "views/pages/ProductDetail";
+import EditBrand from "views/admin/brand/EditBrand";
+import AddBrand from "views/admin/brand/AddBrand";
 
 
 const App = () => {
@@ -181,6 +183,22 @@ const App = () => {
           element={
             <ProtectedRoute requiredRoles={["admin", "manager"]}>
               <AddBanner />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/edit_brand/:id"
+          element={
+            <ProtectedRoute requiredRoles={["admin", "manager"]}>
+              <EditBrand />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/add_brand"
+          element={
+            <ProtectedRoute requiredRoles={["admin", "manager"]}>
+              <AddBrand />
             </ProtectedRoute>
           }
         />

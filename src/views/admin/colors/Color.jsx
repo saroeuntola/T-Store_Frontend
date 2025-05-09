@@ -1,11 +1,7 @@
-import { deleteCategory } from 'config_API/category_api';
-import { getCategory } from 'config_API/category_api'
 import { deleteColor } from 'config_API/Color_api';
 import { getColor } from 'config_API/Color_api';
-import { deleteSize } from 'config_API/Size_api';
-import { getSize } from 'config_API/Size_api';
 import React, { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom';
+import { Link} from 'react-router-dom';
 import { getAccessToken } from 'service/Auth'
 import Swal from 'sweetalert2';
 

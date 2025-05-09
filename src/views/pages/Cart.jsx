@@ -144,7 +144,7 @@ const Cart = () => {
         <div className="rounded-lg bg-white p-6 text-center shadow">
           <p className="text-gray-600">Your cart is currently empty.</p>
           <Link
-            to="/products"
+            to="/shop"
             className="mt-4 inline-block rounded-lg bg-blue-600 px-5 py-2 text-white hover:bg-blue-700"
           >
             Browse Products

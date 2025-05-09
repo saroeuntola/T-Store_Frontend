@@ -11,6 +11,7 @@ import { getProductLimit } from "config_API/Product_api";
 import { CartContext } from "./Context/CartProvider";
 import Swal from "sweetalert2";
 import { SearchContext } from "./Context/SearchContext";
+import { ClipLoader } from "react-spinners";
 
 const Home = () => {
   const [products, setProducts] = useState([]);
@@ -18,7 +19,8 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [bannerLoading, setBannerLoading] = useState(true);
   const { addToCart } = useContext(CartContext);
-   const { searchQuery } = useContext(SearchContext);
+  const { searchQuery } = useContext(SearchContext);
+
   useEffect(() => {
     const fetchProductsAndBanners = async () => {
       try {
@@ -39,6 +41,7 @@ const Home = () => {
 
     fetchProductsAndBanners();
   }, []);
+
   const searchProduct = products.filter((item) => {
     const search = searchQuery.toLowerCase();
     return (
@@ -55,8 +58,8 @@ const Home = () => {
       {/* Hero Section with Slideshow (DYNAMIC) */}
       <div className="relative w-full" style={{ height: "512px" }}>
         {bannerLoading ? (
-          <div className="flex h-[60vh] items-center justify-center text-lg text-gray-600">
-            Loading Banners...
+          <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-60">
+            <ClipLoader color="#0000FF" size={50} />
           </div>
         ) : (
           <Swiper
@@ -70,20 +73,6 @@ const Home = () => {
               banners.map((banner) => (
                 <SwiperSlide key={banner.id}>
                   <div className="flex h-full w-full flex-col items-center justify-between py-6 md:flex-row">
-                    {/* <div className="max-w-lg text-center md:text-left">
-                      <h1 className="text-4xl font-semibold text-gray-800 md:text-5xl">
-                        {banner.title}
-                      </h1>
-                      <p className="mt-2 text-gray-600">{banner.description}</p>
-                      {banner.link && (
-                        <Link
-                          to={banner.link}
-                          className="mt-4 inline-block rounded-lg bg-blue-500 px-6 py-3 font-medium text-white shadow-md transition hover:bg-blue-600"
-                        >
-                          Learn More
-                        </Link>
-                      )}
-                    </div> */}
                     <img
                       src={
                         banner.banner_image
@@ -135,11 +124,13 @@ const Home = () => {
           Featured Products
         </h2>
         {loading ? (
-          <div className="text-center text-gray-500">Loading products...</div>
+          <div className="text-center text-gray-500">
+            <ClipLoader color="#0000FF" size={50}/>
+          </div>
         ) : (
           <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4">
-            {searchProduct && searchProduct.length === 0 ? (
-              <p className=" text-lg text-gray-900">No products found</p>
+            {searchProduct.length === 0 ? (
+              <p className="text-lg text-gray-900">No products found</p>
             ) : (
               searchProduct.map((product) => (
                 <div
@@ -203,7 +194,6 @@ const Home = () => {
                 </div>
               ))
             )}
-            ;
           </div>
         )}
       </div>

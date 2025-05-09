@@ -6,6 +6,7 @@ import { SearchContext } from "./Context/SearchContext";
 import { Link } from "react-router-dom";
 import { getProduct } from "config_API/Product_api";
 import ReactPaginate from "react-paginate";
+import { ClipLoader } from "react-spinners"; // Import the spinner component
 
 const Shop = () => {
   const [products, setProducts] = useState([]);
@@ -131,7 +132,9 @@ const Shop = () => {
 
         {/* Product Grid */}
         {loading ? (
-          <div className="text-center text-gray-500">Loading products...</div>
+          <div className="flex items-center justify-center">
+            <ClipLoader color="#0000FF" size={50} />
+          </div>
         ) : currentProducts.length === 0 ? (
           <div className="text-center text-gray-500">No products found.</div>
         ) : (
