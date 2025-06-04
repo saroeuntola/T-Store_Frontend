@@ -64,13 +64,6 @@ const AddColor = () => {
         <h4 className="mb-4 text-center text-3xl font-bold text-navy-700 dark:text-white sm:text-4xl">
           Add Product Sizes
         </h4>
-
-        <div className="mb-6 flex items-center gap-3">
-          <div className="h-px w-full bg-gray-200 dark:bg-navy-700" />
-          <p className="text-base text-gray-600 dark:text-white"> or </p>
-          <div className="h-px w-full bg-gray-200 dark:bg-navy-700" />
-        </div>
-
         {/* Form */}
         <form onSubmit={handleSubmit(handleCreate)}>
           <div className="mb-4">

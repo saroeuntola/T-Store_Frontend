@@ -51,7 +51,7 @@ const Sizes = () => {
       <div className="overflow-x-auto rounded-lg shadow-md">
         <Link to="/add_sizes">
           <button className="mb-4 w-32 rounded-lg bg-green-600 p-2 text-white">
-            Add Product Size
+            + Add Size
           </button>
         </Link>
         <table className="min-w-full border border-gray-300 bg-white">

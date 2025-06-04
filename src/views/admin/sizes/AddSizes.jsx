@@ -61,15 +61,8 @@ const AddSizes = () => {
     <main className="mt-10 flex justify-center px-4 sm:px-6 lg:px-8">
       <div className="w-full rounded-2xl bg-white px-6 py-16 shadow-xl shadow-gray-700 sm:w-8/12 sm:px-10 md:w-6/12 lg:w-4/12">
         <h4 className="mb-4 text-center text-3xl font-bold text-navy-700 dark:text-white sm:text-4xl">
-          Add Product Sizes
+          Add Sizes
         </h4>
-
-        <div className="mb-6 flex items-center gap-3">
-          <div className="h-px w-full bg-gray-200 dark:bg-navy-700" />
-          <p className="text-base text-gray-600 dark:text-white"> or </p>
-          <div className="h-px w-full bg-gray-200 dark:bg-navy-700" />
-        </div>
-
         {/* Form */}
         <form onSubmit={handleSubmit(handleCreate)}>
           <div className="mb-4">

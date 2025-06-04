@@ -51,7 +51,7 @@ const Color = () => {
       <div className="overflow-x-auto rounded-lg shadow-md">
         <Link to="/add_colors">
           <button className="mb-4 w-32 rounded-lg bg-green-600 p-2 text-white">
-            Add Product Colors
+            + Add Colors
           </button>
         </Link>
         <table className="min-w-full border border-gray-300 bg-white">
@@ -84,7 +84,7 @@ const Color = () => {
                 </td>
                 <td className="border-b px-6 py-4">{item.get_user.username}</td>
                 <td className="border-b px-6 py-4">
-                  <Link to={`/edit_sizes/${item.id}`}>
+                  <Link to={`/edit_colors/${item.id}`}>
                     <button className="w-16 rounded-lg bg-blue-600 p-2 text-white">
                       Edit
                     </button>

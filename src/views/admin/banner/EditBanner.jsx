@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
-import { Button, Label, Textarea, TextInput } from "flowbite-react";
 import { getBannerById, updateBanner } from "config_API/Banner_api";
 import { getAccessToken } from "service/Auth";
 import { urlBannerImage } from "service/baseURL";
@@ -89,65 +88,92 @@ const EditBanner = () => {
   };
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-gray-100">
+    <main className="flex min-h-screen items-center justify-center bg-gray-50 px-4">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="grid w-full max-w-3xl gap-6 rounded-lg bg-white p-8 shadow-lg"
+        className="w-full max-w-3xl space-y-6 rounded-2xl bg-white p-10 shadow-xl"
       >
-        <h2 className="text-xl font-semibold text-gray-700">Edit Banner</h2>
+        <h2 className="text-2xl font-bold text-gray-800"> Edit Banner</h2>
 
         {/* Title Input */}
         <div>
-          <Label value="Banner Title" />
-          <TextInput
+          <label className="mb-1 block text-sm font-medium text-gray-700">
+            Banner Title
+          </label>
+          <input
             {...register("title", { required: "Title is required" })}
             type="text"
+            className="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm"
           />
           {errors.title && (
-            <p className="text-red-500">{errors.title.message}</p>
+            <p className="mt-1 text-sm text-red-500">{errors.title.message}</p>
           )}
         </div>
 
         {/* Description Input */}
         <div>
-          <Label value="Banner Description" />
-          <Textarea
+          <label className="mb-1 block text-sm font-medium text-gray-700">
+            Banner Description
+          </label>
+          <textarea
             {...register("description", {
               required: "Description is required",
             })}
             rows="4"
+            className="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm"
           />
           {errors.description && (
-            <p className="text-red-500">{errors.description.message}</p>
+            <p className="mt-1 text-sm text-red-500">
+              {errors.description.message}
+            </p>
           )}
         </div>
+
+        {/* Link Input */}
         <div>
-          <Label value="Banner Link" />
-          <TextInput
+          <label className="mb-1 block text-sm font-medium text-gray-700">
+            Banner Link
+          </label>
+          <input
             {...register("link", { required: "Link is required" })}
             type="text"
+            className="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm"
           />
-          {errors.link && <p className="text-red-500">{errors.link.message}</p>}
+          {errors.link && (
+            <p className="mt-1 text-sm text-red-500">{errors.link.message}</p>
+          )}
         </div>
-        <TextInput
-          {...register("user_id", { required: "Link is required" })}
-          type="hidden"
-        />
 
+        {/* Hidden user ID */}
+        <input type="hidden" {...register("user_id", { required: true })} />
+
+        {/* Image Upload */}
         <div>
-          <Label value="Banner Image" />
-          <input type="file" onChange={handleImageChange} />
+          <label className="mb-1 block text-sm font-medium text-gray-700">
+            Banner Image
+          </label>
+          <input
+            type="file"
+            onChange={handleImageChange}
+            className="block w-full text-sm text-gray-700 file:mr-4 file:rounded-md file:border-0 file:bg-blue-600 file:px-4 file:py-2 file:font-semibold file:text-white hover:file:bg-blue-700"
+          />
           {imagePreview && (
             <img
               src={imagePreview}
               alt="Preview"
-              className="mt-2 h-32 w-64 rounded-lg object-cover shadow"
+              className="mt-4 w-64 rounded-lg object-cover shadow-md"
+              style={{ height: "128px" }}
             />
           )}
         </div>
-        <Button type="submit" className="w-full">
+
+        {/* Submit Button */}
+        <button
+          type="submit"
+          className="w-full rounded-lg bg-blue-600 px-6 py-2 font-semibold text-white hover:bg-blue-700 focus:ring focus:ring-blue-300"
+        >
           {loading ? "Updating..." : "Update Banner"}
-        </Button>
+        </button>
       </form>
     </main>
   );

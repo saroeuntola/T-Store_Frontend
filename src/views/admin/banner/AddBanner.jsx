@@ -70,60 +70,88 @@ useEffect(() => {
   };
 
   return (
-    <div className="mx-auto max-w-2xl rounded-md bg-white p-6 shadow-lg">
-      <h2 className="mb-4 text-xl font-bold">Add New Banner</h2>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <div className="mx-auto max-w-xl rounded-2xl bg-white p-8 shadow-xl transition-all mt-10">
+      <h2 className="mb-6 text-2xl font-semibold text-gray-800">
+        Add Banner
+      </h2>
+
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        {/* Title */}
         <div>
-          <label className="block font-medium">Title</label>
+          <label className="mb-1 block text-sm font-medium text-gray-700">
+            Title
+          </label>
           <input
-            {...register("title", { required: "Title is required" })}
-            className="w-full rounded border p-2"
             type="text"
+            {...register("title", { required: "Title is required" })}
+            className="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm"
+            placeholder="Enter banner title"
           />
           {errors.title && (
-            <p className="text-red-500">{errors.title.message}</p>
+            <p className="mt-1 text-sm text-red-500">{errors.title.message}</p>
           )}
         </div>
 
+        {/* Description */}
         <div>
-          <label className="block font-medium">Description</label>
+          <label className="mb-1 block text-sm font-medium text-gray-700">
+            Description
+          </label>
           <textarea
             {...register("description", {
               required: "Description is required",
             })}
-            className="w-full rounded border p-2"
+            rows={4}
+            className="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm"
+            placeholder="Enter a brief description"
           />
           {errors.description && (
-            <p className="text-red-500">{errors.description.message}</p>
+            <p className="mt-1 text-sm text-red-500">
+              {errors.description.message}
+            </p>
           )}
         </div>
 
+        {/* Link */}
         <div>
-          <label className="block font-medium">Link</label>
+          <label className="mb-1 block text-sm font-medium text-gray-700">
+            Link
+          </label>
           <input
-            {...register("link")}
-            className="w-full rounded border p-2"
             type="text"
+            {...register("link")}
+            className="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm"
+            placeholder="Optional: https://example.com"
           />
         </div>
 
+        {/* Image Upload */}
         <div>
-          <label className="block font-medium">Banner Image</label>
-          <input type="file" onChange={handleImageChange} />
+          <label className="mb-1 block text-sm font-medium text-gray-700">
+            Banner Image
+          </label>
+          <input
+            type="file"
+            onChange={handleImageChange}
+            className="block w-full text-sm text-gray-700 file:mr-4 file:rounded-md file:border-0 file:bg-blue-500 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-blue-600"
+          />
           {imagePreview && (
             <img
               src={imagePreview}
               alt="Banner Preview"
-              className="mt-2 h-32 w-full object-cover"
+              className="mt-4 w-full rounded-lg border object-cover shadow-md"
+              style={{ height: "160px" }}
             />
           )}
         </div>
 
-        <input type="hidden" {...register("user_id")}/>
+        {/* Hidden User ID */}
+        <input type="hidden" {...register("user_id")} />
 
+        {/* Submit */}
         <button
           type="submit"
-          className="w-full rounded bg-blue-500 p-2 text-white hover:bg-blue-600"
+          className="w-full rounded-lg bg-blue-600 px-4 py-2 font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-1"
         >
           Add Banner
         </button>

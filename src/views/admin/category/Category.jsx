@@ -1,7 +1,7 @@
 import { deleteCategory } from 'config_API/category_api';
 import { getCategory } from 'config_API/category_api'
 import React, { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { getAccessToken } from 'service/Auth'
 import Swal from 'sweetalert2';
 
@@ -50,7 +50,7 @@ const Category = () => {
       <div className="overflow-x-auto rounded-lg shadow-md">
         <Link to="/addcategory">
           <button className="mb-4 w-32 rounded-lg bg-green-600 p-2 text-white">
-            Add Category
+            + Add Category
           </button>
         </Link>
         <table className="min-w-full border border-gray-300 bg-white">
