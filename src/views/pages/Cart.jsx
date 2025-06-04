@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext} from "react";
 import { CartContext } from "../pages/Context/CartProvider"; // Adjust if needed
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { FaPlus, FaMinus, FaTrash } from "react-icons/fa";
 import { urlProductImage } from "service/baseURL";
 import Swal from "sweetalert2";
@@ -11,7 +11,6 @@ import QRCode from "qrcode"
 import './Style.css';
 import { checkTransaction } from "config_API/Bakong_API";
 import bakongLogo from "./images/bakong_Logo.png"
-import { getAccessToken } from "service/Auth";
 
 const Cart = () => {
   const { cartItems, addToCart, removeFromCart, clearCart, getCartTotal } =

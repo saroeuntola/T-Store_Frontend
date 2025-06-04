@@ -10,6 +10,7 @@ const token = getAccessToken();
    try{
      const response = await getRole(token);
      setRoles(response?.data);
+     console.log(response?.data);
    }
    catch(error){
      console.log(error);

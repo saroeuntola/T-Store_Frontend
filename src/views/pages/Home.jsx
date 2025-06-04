@@ -80,7 +80,7 @@ const Home = () => {
                           : "https://via.placeholder.com/820x312"
                       }
                       alt={banner.title}
-                      className="h-full w-full object-contain"
+                      className="h-full w-full object-cover"
                     />
                   </div>
                 </SwiperSlide>
